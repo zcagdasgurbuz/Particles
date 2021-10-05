@@ -50,7 +50,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     private boolean updated;
     private Subscription storeSubscription;
 
-    Cosmos(Store<ParticlesState> store, int particleCount, int colorCount, int width, int height) {
+    public Cosmos(Store<ParticlesState> store, int particleCount, int colorCount, int width, int height) {
         this.store = store;
         storeSubscription = store.subscribe(this);
         this.particleCount = particleCount;

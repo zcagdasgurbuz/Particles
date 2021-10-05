@@ -7,4 +7,6 @@ module com.zeynelcgurbuz.particles {
     exports com.zeynelcgurbuz.particles.animation;
     exports com.zeynelcgurbuz.particles.redux;
     exports com.zeynelcgurbuz.particles.store;
+    exports com.zeynelcgurbuz.particles.ui;
+    opens com.zeynelcgurbuz.particles.ui to javafx.fxml;
 }

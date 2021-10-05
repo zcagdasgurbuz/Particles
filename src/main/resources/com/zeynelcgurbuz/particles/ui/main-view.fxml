@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.StackPane?>
 <StackPane fx:id="topContainer" xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zeynelcgurbuz.particles.MainViewController"
+           fx:controller="com.zeynelcgurbuz.particles.ui.MainViewController"
            prefHeight="800" prefWidth="1200" pickOnBounds="false">
 
     <fx:include fx:id="display" source="display.fxml"

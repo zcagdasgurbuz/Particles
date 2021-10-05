@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.Pane?>
 <Pane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.zeynelcgurbuz.particles.DisplayController">
+      fx:controller="com.zeynelcgurbuz.particles.ui.DisplayController">
     <Canvas fx:id="canvas" height="${container.height}" width="${container.width}">
     </Canvas>
 </Pane>

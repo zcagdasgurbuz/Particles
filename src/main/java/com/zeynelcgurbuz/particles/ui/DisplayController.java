@@ -1,5 +1,7 @@
-package com.zeynelcgurbuz.particles;
+package com.zeynelcgurbuz.particles.ui;
 
+import com.zeynelcgurbuz.particles.Cosmos;
+import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.animation.Animator;
 import com.zeynelcgurbuz.particles.animation.ParticleAnimator;
 import com.zeynelcgurbuz.particles.redux.Store;

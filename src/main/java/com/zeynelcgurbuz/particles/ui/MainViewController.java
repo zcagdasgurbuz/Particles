@@ -1,4 +1,4 @@
-package com.zeynelcgurbuz.particles;
+package com.zeynelcgurbuz.particles.ui;
 
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.store.ParticlesState;

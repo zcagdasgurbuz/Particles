@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--translateX="-305"  defaultDrawerSize="300.0"-->
+
+<StackPane fx:id="slidingMenu" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+           minWidth="-Infinity" prefWidth="300.0" translateX="-305" xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml" fx:controller="com.zeynelcgurbuz.particles.ui.SlidingMenuController">
+    <children>
+
+
+    </children>
+</StackPane>

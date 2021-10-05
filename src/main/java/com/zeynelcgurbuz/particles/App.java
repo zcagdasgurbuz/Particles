@@ -44,7 +44,7 @@ public class App extends Application {
             }
         };*/
 
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ui/main-view.fxml"));
 
             //FXMLLoader fxmlLoader = new FXMLLoader();
             //fxmlLoader.setLocation(getClass().getClassLoader().getResource("/main-view.fxml"));
