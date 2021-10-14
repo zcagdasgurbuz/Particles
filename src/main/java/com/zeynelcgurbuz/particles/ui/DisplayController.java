@@ -60,7 +60,6 @@ public class DisplayController {
             }
             @Override
             protected Point2D computeValue() {
-                System.out.println(x.doubleValue() + " -- " + y.doubleValue());
                 return new Point2D(x.doubleValue(), y.doubleValue());
             }
         };

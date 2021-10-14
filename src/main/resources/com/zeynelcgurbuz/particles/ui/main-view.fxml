@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.StackPane?>
-<StackPane fx:id="topContainer" xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zeynelcgurbuz.particles.ui.MainViewController"
-           prefHeight="800" prefWidth="1200" pickOnBounds="false">
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="topContainer" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.zeynelcgurbuz.particles.ui.MainViewController"
+            prefHeight="800" prefWidth="1200" pickOnBounds="false">
 
     <fx:include fx:id="display" source="display.fxml"
                 prefWidth="${topContainer.width}" prefHeight="${topContainer.height}" pickOnBounds="false"/>
-
-</StackPane>
+    <fx:include source="SlidingMenu.fxml" prefWidth="300" prefHeight="${topContainer.height}" translateX="-310"
+                alignment="TOP_LEFT"/>
+</AnchorPane>

@@ -35,6 +35,13 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     private Vector unitNormalVector = new Vector(); // unit normal
     private Vector unitTangentVector = new Vector(); // unit tangent
 
+    private double attractionMean;
+    private double attractionStd;
+    private double minRLower;
+    private double minRUpper;
+    private double maxRLower;
+    private double maxRUpper;
+    private double friction;
 
     private final ArrayList<Particle> particles;
     private final ArrayList<Color> colors;
@@ -57,9 +64,21 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         this.colorCount = colorCount;
         particles = new ArrayList<>();
         colors = new ArrayList<>();
+        //**************************
+        attractionMean = -0.02;
+        attractionStd = 0.06;
+        minRLower = 0.0;
+        minRUpper = 20.0;
+        maxRLower = 20.0;
+        maxRUpper = 70.0;
+        friction = 0.05;
+        //**************************
+
         generateColors();
         setBoundaries(0, 0, width, height);
         setRandomParticles();
+
+
     }
 
     @Override
@@ -188,24 +207,20 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         if (positionVector1.x > width - radius) {
             positionVector1.x = width - radius;
             velocityVector1.x = -velocityVector1.x;
-            //collisions++;
         }
         if (positionVector1.y > height - radius) {
             positionVector1.y = height - radius;
             velocityVector1.y = -velocityVector1.y;
-            //collisions++;
         }
         particle.setPosition(positionVector1);
         particle.setVelocity(velocityVector1);
     }
-
 
     private void generateColors() {
         for (int idx = 0; idx < colorCount; idx++) {
             colors.add(ColorManager.next());
         }
     }
-
 
     public void setBoundaries(int startX, int startY, int width, int height) {
         this.startX = startX;
@@ -240,6 +255,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             particle.setVelocity(0, 0);
             particles.add(particle);
         }
+
+
         //add a big particle
         /*Particle particle = new Particle();
         particle.setPosition(600,400);
@@ -249,6 +266,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         particle.setVelocity(0, 0);
         particles.add(particle);*/
     }
+
+
 
     public void setAnimator(Animator animator) {
         animator.attach(this);
@@ -282,7 +301,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 particle.setPosition(particle.getPosition().add(initialPositionVector));
             }
         }
-
     }
 
     @Override
@@ -294,6 +312,5 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             updatePositions();
             store.dispatch(new MouseDragStopAction());
         }*/
-        System.out.println(state.getMouseDragPosition());
     }
 }
