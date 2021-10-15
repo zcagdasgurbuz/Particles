@@ -102,6 +102,10 @@ public class Vector {
         return this;
     }
 
+    public static Vector subtract(Vector v1, Vector v2){
+        return new Vector(v1.x - v2.x, v1.y - v2.y);
+    }
+
     /**
      * Multiply the given Vector by this Vector; return the scalar product.
      *
@@ -121,6 +125,13 @@ public class Vector {
     public Vector scale(double s) {
         this.x *= s;
         this.y *= s;
+        return this;
+    }
+
+
+    public Vector divide(double s) {
+        this.x /= s;
+        this.y /= s;
         return this;
     }
 

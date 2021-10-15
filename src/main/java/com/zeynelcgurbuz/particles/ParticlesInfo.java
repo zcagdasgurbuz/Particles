@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ParticlesInfo {
+
     private ArrayList<Color> colors = new ArrayList<>();
     private ArrayList<Double> attractions = new ArrayList<>();
     private ArrayList<Double> minDistances = new ArrayList<>();
@@ -14,8 +15,12 @@ public class ParticlesInfo {
     public void setSizes(int size){
         colors = new ArrayList<>(Collections.nCopies(size, Color.WHITE));
         attractions = new ArrayList<>(Collections.nCopies(size * size, 0.0));
-        minDistances = new ArrayList<>(Collections.nCopies(size, 0.0));
-        maxDistances = new ArrayList<>(Collections.nCopies(size, 0.0));
+        minDistances = new ArrayList<>(Collections.nCopies(size * size, 0.0));
+        maxDistances = new ArrayList<>(Collections.nCopies(size * size, 0.0));
+    }
+
+    public int size(){
+        return colors.size();
     }
 
     public void addColor(Color color){
@@ -46,23 +51,23 @@ public class ParticlesInfo {
         minDistances.add(minDistance);
     }
 
-    public void setMinDistance(int otherType, double minDistance){
-        minDistances.set(otherType, minDistance);
+    public void setMinDistance(int type, int otherType, double minDistance){
+        minDistances.set(type * colors.size() + otherType, minDistance);
     }
     
-    public double getMinDistance(int otherType){
-        return minDistances.get(otherType);
+    public double getMinDistance(int type, int otherType){
+        return minDistances.get(type * colors.size() + otherType);
     }
 
     public void addMaxDistance(double maxDistance){
         maxDistances.add(maxDistance);
     }
 
-    public void setMaxDistance(int otherType, double maxDistance){
-        maxDistances.set(otherType, maxDistance);
+    public void setMaxDistance(int type, int otherType, double maxDistance){
+        maxDistances.set(type * colors.size() + otherType, maxDistance);
     }
 
-    public double getMaxDistance(int otherType){
-        return maxDistances.get(otherType);
+    public double getMaxDistance(int type, int otherType){
+        return maxDistances.get(type * colors.size() + otherType);
     }
 }

@@ -15,7 +15,7 @@ public class Particle {
     private double velocityX;
     private double velocityY;
     private Color color;
-    private ParticleType type;
+    private int type;
 
     public Particle(double x, double y, double radius, double mass, double attractionConstant, double velocityX,
                     double velocityY, Color color) {
@@ -95,11 +95,11 @@ public class Particle {
         return color;
     }
 
-    public void setType(ParticleType type){
+    public void setType(int type){
         this.type = type;
     }
 
-    public ParticleType getType(){
+    public int getType(){
         return type;
     }
 
