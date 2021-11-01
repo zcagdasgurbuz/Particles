@@ -67,7 +67,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         colors = new ArrayList<>();
         //**************************
         attractionMean = -0.02;
-        attractionStd = 0.06;
+        attractionStd = 0.1;
         minRLower = 0.0;
         minRUpper = 20.0;
         maxRLower = 20.0;
@@ -81,12 +81,11 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         setRandomTypes();
         //**************************
         setRandomParticles();
-
-
     }
 
     @Override
     public void update(double timePassedFromLastFrame) {
+        //applyAttractionMolecular();
         for (int thisIdx = 0; thisIdx < particles.size(); thisIdx++) {
 
 
@@ -102,8 +101,9 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             //applyFriction(thisIdx);
             //applyAttraction(thisIdx, timePassedFromLastFrame / 1000000000.0);
 
-/*            for (int i = thisIdx + 1; i < particles.size(); i++) {
+/*            for (int i = 0; i < particles.size(); i++) {
                 //Particle particle2 = particles.get(i);
+                Particle particle1 = particles.get(i);
                 //collideParticles(particle1, particle2);
 
             }*/
@@ -112,7 +112,49 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         drawCosmos();
     }
 
+    private void applyAttractionMolecular(int indexOfParticle) {
+        //for (int indexOfParticle = 0; indexOfParticle < particles.size(); indexOfParticle++) {
+        Particle particle1 = particles.get(indexOfParticle);
+        for (int idx = 0; idx < particles.size(); idx++) {
+            Particle particle2 = particles.get(idx);
+            Vector delta = Vector.subtract(particle2.getPosition(), particle1.getPosition());
+            double r = delta.norm();
+
+            double minR = info.getMinDistance(particle1.getType(), particle2.getType());
+            double maxR = info.getMaxDistance(particle1.getType(), particle2.getType());
+            if (r > maxR || r < 0.01) {
+                continue;
+            }
+
+
+            delta.divide(r);
+            boolean flat_force = false;
+
+            double force = 0.0;
+            if (r > minR) {
+                if (flat_force) {
+                    force = info.getAttraction(particle1.getType(), particle2.getType());
+                } else {
+                    double top = 2.0 * Math.abs(r - 0.5 * (maxR + minR));
+                    double bottom = maxR - minR;
+                    force = info.getAttraction(particle1.getType(), particle2.getType()) * (1.0 - (top / bottom));
+                }
+            } else {
+                force = 2.0 * minR * ((1.0 / (minR + 2.0)) - (1.0 / (r + 2.0)));
+            }
+
+
+            delta.scale(force);
+            particle1.setVelocity(particle1.getVelocity().add(delta));
+
+
+           particle1.setPosition(particle1.getPosition().add(particle1.getVelocity()));
+            //friction
+            particle1.setVelocity(particle1.getVelocity().scale(1.0 - friction));
+        }
+    }
     // Check for collision between atom1 & atom2
+
     private void collideParticles(Particle a1, Particle a2) {
         double radius = a1.getRadius() + a2.getRadius();
         positionVector1 = a1.getPosition(positionVector1);
@@ -176,51 +218,13 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     }
 
-    private void applyAttractionMolecular(int indexOfParticle){
-        Particle particle1 = particles.get(indexOfParticle);
-        for(int idx = 0; idx < particles.size(); idx++){
-            Particle particle2 = particles.get(idx);
-
-            Vector delta = Vector.subtract(particle2.getPosition(), particle1.getPosition());
-            double r = delta.norm();
-            double minR = info.getMinDistance(particle1.getType(), particle2.getType());
-            double maxR = info.getMaxDistance(particle1.getType(), particle2.getType());
-
-            if(indexOfParticle == idx || r > maxR  || r < 0.1){
-                continue;
-            }
-
-            delta.divide(r);
-
-            boolean flat_force = false;
-
-            double force = 0.0;
-            if(r > minR){
-                if(flat_force) {
-                    force = info.getAttraction(particle1.getType(), particle2.getType());
-                } else {
-                    double top = 2.0 * Math.abs(r - 0.5 * (maxR + minR));
-                    double bottom = maxR - minR;
-                    force =  info.getAttraction(particle1.getType(), particle2.getType()) * (1.0 - top / bottom);
-                }
-            } else {
-                force = 2.0 * minR * (1.0 / (minR + 2.0) - 1.0 / (r + 2.0));
-            }
-            particle1.setVelocity(particle1.getVelocity().add(delta.scale(force)));
-
-            particle1.setPosition(particle1.getPosition().add(particle1.getVelocity()));
-            //friction
-            particle1.setVelocity(particle1.getVelocity().scale(1.0 - friction));
-        }
-    }
-
     private void calculateAndAddToAttractionVector(Particle particle1, Particle particle2) {
         Vector distance = particle2.getPosition().subtract(particle1.getPosition());
         double r = distance.norm();
         double force = G * particle1.getMass() * particle2.getMass() * (r * r);
         Vector gravitationalForceVector = distance.unitVector().scale(force);
         //if(particle1.getType() == ParticleType.ATTRACTION) {
-            attractionVector.add(gravitationalForceVector);
+        attractionVector.add(gravitationalForceVector);
         //} else {
         //    attractionVector.subtract(gravitationalForceVector);
         //}
@@ -261,25 +265,25 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         particle.setVelocity(velocityVector1);
     }
 
-    private void setRandomTypes(){
+    private void setRandomTypes() {
 
-        for(int i = 0; i < info.size(); i++){
+        for (int i = 0; i < info.size(); i++) {
             info.setColor(i, colors.get(i));
 
-            for(int j = 0; j < info.size(); j++){
-                if(i == j){
-                    info.setAttraction(i,j, -Math.abs(random.nextGaussian()*attractionStd+attractionMean));
-                    info.setMinDistance(i,j,MIN_RADIUS);
+            for (int j = 0; j < info.size(); j++) {
+                if (i == j) {
+                    info.setAttraction(i, j, -Math.abs(random.nextGaussian() * attractionStd + attractionMean));
+                    info.setMinDistance(i, j, MIN_RADIUS);
                 } else {
-                    info.setAttraction(i,j, random.nextGaussian()*attractionStd+attractionMean);
-                    info.setMinDistance(i,j,Math.max(minRLower
+                    info.setAttraction(i, j, (random.nextGaussian() * attractionStd + attractionMean));
+                    info.setMinDistance(i, j, Math.max(minRLower
                             + (minRUpper - minRLower) * random.nextDouble(), MIN_RADIUS));
                 }
-                info.setMaxDistance(i,j,Math.max(maxRLower + (maxRUpper - maxRLower) * random.nextDouble(),
-                        info.getMinDistance(i,j)));
+                info.setMaxDistance(i, j, Math.max(maxRLower + (maxRUpper - maxRLower) * random.nextDouble(),
+                        info.getMinDistance(i, j)));
 
-                info.setMaxDistance(j,i,info.getMaxDistance(i,j));
-                info.setMinDistance(j,i,info.getMinDistance(i,j));
+                info.setMaxDistance(j, i, info.getMaxDistance(i, j));
+                info.setMinDistance(j, i, info.getMinDistance(i, j));
 
             }
         }
@@ -306,8 +310,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                     random.nextDouble() * (width - startX) + startX,
                     random.nextDouble() * (height - startY) + startY);
             //int id = i % colors.size();
-             //int type = i % colors.size();
-             int type = random.nextInt(colors.size());
+            //int type = i % colors.size();
+            int type = random.nextInt(info.size());
             //double attractionConstant = 0.5 + id * 0.1;
 /*            if (i % 2 != 0) {
                 particle.setType(ParticleType.ATTRACTION);
@@ -320,9 +324,9 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             particle.setColor(info.getColor(type));
             //particle.setRadius(id + MIN_RADIUS);
             particle.setRadius(MIN_RADIUS);
-            double vx = random.nextDouble() * 50;
+            double vx = random.nextDouble() * 10;
             if (random.nextBoolean()) vx = -vx;
-            double vy = random.nextDouble()  * 50;
+            double vy = random.nextDouble() * 10;
             if (random.nextBoolean()) vy = -vy;
             particle.setVelocity(vx, vy);
             //particle.setVelocity(0, 0);
@@ -339,8 +343,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         particle.setVelocity(0, 0);
         particles.add(particle);*/
     }
-
-
 
     public void setAnimator(Animator animator) {
         animator.attach(this);
