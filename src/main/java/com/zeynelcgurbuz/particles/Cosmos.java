@@ -84,17 +84,17 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         //attractionMean = 0.0;
         //attractionStd = 1.2;
         inRangeStyle = 4;
-        belowRangeStyle = 11;
-        outRangeStyle = 11;
+        belowRangeStyle = 5;
+        outRangeStyle = 21;
 
 
         minRLower = 15;
         minRUpper = 20;
-        attractionMin = -0.2;
-        attractionMax = 0.2;
+        attractionMin = -1.5;
+        attractionMax = 1.5;
         maxRLower = 20.0;
         maxRUpper = 120.0;
-        friction = 0.2;
+        friction = 0.005;
         g = 0.10;
         flatForce = false;
         tooClose = true;
@@ -162,11 +162,11 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         }
     }
 
-    private void applyForceBasedOnStyle(Vector vector, Particle particle1, Particle particle2, double distance, int style){
+    private void applyForceBasedOnStyle(Vector vector, Particle particle1, Particle particle2, double distance, int style) {
         double force1 = info.getAttraction(particle1.getType(), particle2.getType());
         double force2 = info.getAttraction(particle2.getType(), particle1.getType());
 
-        switch (style){
+        switch (style) {
             case 1:
                 vector.scale(force1 + force2);
                 particle1.setVelocity(particle1.getVelocity().add(vector));
@@ -207,11 +207,42 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 vector.scale(-1 / (distance * distance));
                 particle1.setVelocity(particle1.getVelocity().add(vector));
                 break;
+            case 11:
+                vector.scale(force1);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 12:
+                vector.scale(force2);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 13:
+                vector.scale(-force1);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 14:
+                vector.scale(-force2);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 15:
+                vector.scale(force1 / distance * distance);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 16:
+                vector.scale(force2 / (distance * distance));
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 17:
+                vector.scale(-force1 / distance * distance);
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
+            case 18:
+                vector.scale(-force2 / (distance * distance));
+                particle1.setVelocity(particle1.getVelocity().add(vector));
+                break;
             default:
                 //
         }
     }
-
 
 
     //
@@ -276,7 +307,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     }
 
     private void applyAttraction(int indexOfParticle, double timePassedFromLastUpdate) {
-        //attractionVector.reset();
+
         Particle particle1 = particles.get(indexOfParticle);
         Particle particle2;
         Vector attractionForceVector = new Vector();
@@ -288,16 +319,9 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             particle2 = particles.get(idx);
             attractionForceVector.add(calculateAttractionVector(particle1, particle2));
         }
-        //Vector attractionForceVector = attractionVector.scale(1 / particle1.getMass());
-        //attractionForceVector.scale(1 / particle1.getMass()); // convert force vector to acc. vector
-        //v_f = v_i + (a * t), and acceleration is opposing, so it is negative.
 
         particle1.setVelocity(particle1.getVelocity()
                 .add(attractionForceVector));
-
-        //some friction
-        //particle1.setVelocity(particle1.getVelocity().scale(0.98));
-
     }
 
     private Vector calculateAttractionVector(Particle particle1, Particle particle2) {
@@ -381,9 +405,9 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
 
         //add a big particle
-        /*Particle particle = new Particle();
+/*        Particle particle = new Particle();
         particle.setPosition(600,400);
-        particle.setType(ParticleType.ATTRACTION);
+
         particle.setRadius(50);
         particle.setColor(Color.YELLOW);
         particle.setVelocity(0, 0);
