@@ -21,6 +21,14 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     private static final double G = 6.67398 * 0.00000000001;
 
     private static final Random random = new Random();
+    private final double minRMean;
+    private final double minRStd;
+    private final double maxRMean;
+    private final double maxRStd;
+    private final boolean minRStandard;
+    private final boolean attractionStandard;
+    private final boolean maxRStandard;
+    private final boolean negateSelfAttraction;
     private int startX;
     private int startY;
     private int width;
@@ -79,25 +87,36 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         colors = new ArrayList<>();
         //**************************
         this.particleCount = 400;
-        this.colorCount = 7;
+        this.colorCount = 5;
 
-        //attractionMean = 0.0;
-        //attractionStd = 1.2;
+
         inRangeStyle = 4;
         belowRangeStyle = 5;
         outRangeStyle = 21;
 
 
-        minRLower = 15;
+        minRLower = 10;
         minRUpper = 20;
-        attractionMin = -1.5;
-        attractionMax = 1.5;
-        maxRLower = 20.0;
-        maxRUpper = 120.0;
-        friction = 0.005;
-        g = 0.10;
-        flatForce = false;
-        tooClose = true;
+        minRMean = 0.0;
+        minRStd = 0.0;
+        minRStandard = false;
+
+        attractionMin = -1.0;
+        attractionMax = 1.0;
+        attractionMean = 0.5;
+        attractionStd = 15.0;
+        attractionStandard = true;
+        negateSelfAttraction = false;
+
+        maxRLower = 30.0;
+        maxRUpper = 70.0;
+        maxRMean = 0.0;
+        maxRStd = 0.0;
+        maxRStandard = false;
+
+        friction = 0.3;
+        g = 0.1; //gravity constant
+
         molAttract = true;
         gravAttract = false;
         walls = true;
@@ -125,6 +144,10 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
             performParticleCollisions(thisIdx);
 
+            //double time = timePassedFromLastFrame/1000000000.0;
+
+
+            //update position
             particle1.setPosition(particle1.getPosition().add(particle1.getVelocity()));
             //friction
             particle1.setVelocity(particle1.getVelocity().scale(1.0 - friction));
@@ -364,9 +387,17 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             info.setColor(i, colors.get(i));
 
             for (int j = 0; j < info.size(); j++) {
-                info.setAttraction(i, j, (attractionMin + (attractionMax - attractionMin) * random.nextDouble()));
-                info.setMaxDistance(i, j, (maxRLower + (maxRUpper - maxRLower) * random.nextDouble()));
-                info.setMinDistance(i, j, (minRLower + (minRUpper - minRLower) * random.nextDouble()));
+                int sign = 1;
+                if(negateSelfAttraction && i == j) sign = -1;
+
+                if(attractionStandard) info.setAttraction(i, j, sign * (attractionMean + (attractionStd * random.nextGaussian())));
+                else info.setAttraction(i, j, (attractionMin + (attractionMax - attractionMin) * random.nextDouble()));
+
+                if(maxRStandard) info.setAttraction(i, j, (maxRMean + (maxRStd * random.nextGaussian())));
+                else info.setMaxDistance(i, j, (maxRLower + (maxRUpper - maxRLower) * random.nextDouble()));
+
+                if(minRStandard) info.setAttraction(i, j, (minRMean + (minRStd * random.nextGaussian())));
+                else info.setMinDistance(i, j, (minRLower + (minRUpper - minRLower) * random.nextDouble()));
             }
         }
     }
