@@ -65,7 +65,9 @@ public class App extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         //MainViewController controller = fxmlLoader.getController();
-
+        scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;500;700;800&display=swap");
+        // style sheet needs to be attached again, because it seems that JFXDecorator removes style sheet
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         stage.setTitle("Particles!");
         stage.setScene(scene);

@@ -9,6 +9,6 @@
 
     <fx:include fx:id="display" source="display.fxml"
                 prefWidth="${topContainer.width}" prefHeight="${topContainer.height}" pickOnBounds="false"/>
-    <fx:include source="SlidingMenu.fxml" prefWidth="300" prefHeight="${topContainer.height}" translateX="-310"
+    <fx:include source="sliding-menu.fxml" prefWidth="300" prefHeight="${topContainer.height}" translateX="-310"
                 alignment="TOP_LEFT"/>
 </AnchorPane>

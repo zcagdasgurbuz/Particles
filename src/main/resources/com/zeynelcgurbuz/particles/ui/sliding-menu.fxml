@@ -11,6 +11,7 @@
            minWidth="-Infinity" prefWidth="300.0" xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml" fx:controller="com.zeynelcgurbuz.particles.ui.SlidingMenuController" >
     <children>
+        <fx:include fx:id="menuContent" prefHeight="${slidingMenu.prefHeight}" source="menu-content.fxml"/>
         <Button fx:id="menuButton" contentDisplay="CENTER" graphicTextGap="0.0" translateX="320"
                 translateY="20" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="CENTER"
                 wrapText="true" onAction="#menuButtonAction">

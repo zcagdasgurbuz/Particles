@@ -114,7 +114,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         maxRStd = 0.0;
         maxRStandard = false;
 
-        friction = 0.3;
+        friction = 0.25;
         g = 0.1; //gravity constant
 
         molAttract = true;

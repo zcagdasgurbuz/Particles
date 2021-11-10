@@ -8,6 +8,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -36,6 +37,7 @@ public class SlidingMenuController {
     public Rectangle topLine;
     public Rectangle midLine;
     public Rectangle bottomLine;
+    public ScrollPane menuContent;
 
     /** Whether the menu open/visible. */
     private boolean isOpen;
