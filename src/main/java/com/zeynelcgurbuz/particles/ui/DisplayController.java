@@ -67,7 +67,7 @@ public class DisplayController {
 
         container.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
-        cosmos = new Cosmos(store,400, 9, 1200, 800);
+        cosmos = new Cosmos(store,1200, 800);
         //cosmos.setBoundaries(0, 0, 600, 400);
         canvas.widthProperty().addListener((observable, oldValue, newValue) -> {
             cosmos.setBoundaries(0, 0, (int) newValue.doubleValue(), (int) canvas.getHeight());

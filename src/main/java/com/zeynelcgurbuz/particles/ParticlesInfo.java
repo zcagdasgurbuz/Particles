@@ -2,11 +2,11 @@ package com.zeynelcgurbuz.particles;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 
-public class ParticlesInfo {
+
+public class ParticlesInfo  implements Serializable {
 
     private Color[] colors;
     private double[][] attractions;
@@ -14,7 +14,6 @@ public class ParticlesInfo {
     private double[][] maxDistances;
 
     public void setSizes(int size){
-
         colors = new Color[size];
         Arrays.fill(colors, Color.WHITE);
         attractions = new double[size][size];
@@ -26,10 +25,6 @@ public class ParticlesInfo {
         return colors.length;
     }
 
-   /* public void addColor(Color color){
-        colors.add(color);
-    }*/
-
     public void setColor(int type, Color color){
         colors[type]  = color;
     }
@@ -38,10 +33,6 @@ public class ParticlesInfo {
         return colors[type];
     }
 
-    /*public void addAttraction(double attraction){
-        attractions.add(attraction);
-    }
-*/
     public void setAttraction(int type, int otherType, double attraction){
         attractions[type][otherType] = attraction;
     }
@@ -50,10 +41,6 @@ public class ParticlesInfo {
         return attractions[type][otherType];
     }
 
-/*    public void addMinDistance(double minDistance){
-        minDistances.add(minDistance);
-    }*/
-
     public void setMinDistance(int type, int otherType, double minDistance){
         minDistances[type][otherType] = minDistance;
     }
@@ -61,10 +48,6 @@ public class ParticlesInfo {
     public double getMinDistance(int type, int otherType){
         return  minDistances[type][otherType];
     }
-
-   /* public void addMaxDistance(double maxDistance){
-        maxDistances.add(maxDistance);
-    }*/
 
     public void setMaxDistance(int type, int otherType, double maxDistance){
         maxDistances[type][otherType] = maxDistance;

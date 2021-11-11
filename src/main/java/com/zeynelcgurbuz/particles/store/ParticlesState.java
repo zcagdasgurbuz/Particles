@@ -1,9 +1,9 @@
 package com.zeynelcgurbuz.particles.store;
 
+import com.zeynelcgurbuz.particles.ParticlesInfo;
 import com.zeynelcgurbuz.particles.Vector;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class ParticlesState implements Serializable {
     //private final List<String> items;
@@ -44,9 +44,9 @@ public class ParticlesState implements Serializable {
 
     private boolean molAttract = true;
     private boolean gravAttract = false;
-    private boolean walls = true;
+    private boolean wallsActive = true;
 
-
+    private ParticlesInfo info = new ParticlesInfo();
 
 
 
@@ -92,5 +92,247 @@ public class ParticlesState implements Serializable {
     public ParticlesState setMouseDragPosition(Vector mouseDragPosition){
         this.mouseDragPosition = mouseDragPosition;
         return this;
+    }
+
+    public int getParticleCount() {
+        return particleCount;
+    }
+
+    public ParticlesState setParticleCount(int particleCount) {
+        this.particleCount = particleCount;
+        return this;
+    }
+
+    public int getColorCount() {
+        return colorCount;
+    }
+
+    public ParticlesState setColorCount(int colorCount) {
+        this.colorCount = colorCount;
+        return this;
+    }
+
+    public int getInRangeStyle() {
+        return inRangeStyle;
+    }
+
+    public ParticlesState setInRangeStyle(int inRangeStyle) {
+        this.inRangeStyle = inRangeStyle;
+        return this;
+    }
+
+    public int getBelowRangeStyle() {
+        return belowRangeStyle;
+    }
+
+    public ParticlesState setBelowRangeStyle(int belowRangeStyle) {
+        this.belowRangeStyle = belowRangeStyle;
+        return this;
+    }
+
+    public int getOutRangeStyle() {
+        return outRangeStyle;
+    }
+
+    public ParticlesState setOutRangeStyle(int outRangeStyle) {
+        this.outRangeStyle = outRangeStyle;
+        return this;
+    }
+
+    public double getMinRLower() {
+        return minRLower;
+    }
+
+    public ParticlesState setMinRLower(double minRLower) {
+        this.minRLower = minRLower;
+        return this;
+    }
+
+    public double getMinRUpper() {
+        return minRUpper;
+    }
+
+    public ParticlesState setMinRUpper(double minRUpper) {
+        this.minRUpper = minRUpper;
+        return this;
+    }
+
+    public double getMinRMean() {
+        return minRMean;
+    }
+
+    public ParticlesState setMinRMean(double minRMean) {
+        this.minRMean = minRMean;
+        return this;
+    }
+
+    public double getMinRStd() {
+        return minRStd;
+    }
+
+    public ParticlesState setMinRStd(double minRStd) {
+        this.minRStd = minRStd;
+        return this;
+    }
+
+    public boolean isMinRStandard() {
+        return minRStandard;
+    }
+
+    public ParticlesState setMinRStandard(boolean minRStandard) {
+        this.minRStandard = minRStandard;
+        return this;
+    }
+
+    public double getAttractionMin() {
+        return attractionMin;
+    }
+
+    public ParticlesState setAttractionMin(double attractionMin) {
+        this.attractionMin = attractionMin;
+        return this;
+    }
+
+    public double getAttractionMax() {
+        return attractionMax;
+    }
+
+    public ParticlesState setAttractionMax(double attractionMax) {
+        this.attractionMax = attractionMax;
+        return this;
+    }
+
+    public double getAttractionMean() {
+        return attractionMean;
+    }
+
+    public ParticlesState setAttractionMean(double attractionMean) {
+        this.attractionMean = attractionMean;
+        return this;
+    }
+
+    public double getAttractionStd() {
+        return attractionStd;
+    }
+
+    public ParticlesState setAttractionStd(double attractionStd) {
+        this.attractionStd = attractionStd;
+        return this;
+    }
+
+    public boolean isAttractionStandard() {
+        return attractionStandard;
+    }
+
+    public ParticlesState setAttractionStandard(boolean attractionStandard) {
+        this.attractionStandard = attractionStandard;
+        return this;
+    }
+
+    public boolean isNegateSelfAttraction() {
+        return negateSelfAttraction;
+    }
+
+    public ParticlesState setNegateSelfAttraction(boolean negateSelfAttraction) {
+        this.negateSelfAttraction = negateSelfAttraction;
+        return this;
+    }
+
+    public double getMaxRLower() {
+        return maxRLower;
+    }
+
+    public ParticlesState setMaxRLower(double maxRLower) {
+        this.maxRLower = maxRLower;
+        return this;
+    }
+
+    public double getMaxRUpper() {
+        return maxRUpper;
+    }
+
+    public ParticlesState setMaxRUpper(double maxRUpper) {
+        this.maxRUpper = maxRUpper;
+        return this;
+    }
+
+    public double getMaxRMean() {
+        return maxRMean;
+    }
+
+    public ParticlesState setMaxRMean(double maxRMean) {
+        this.maxRMean = maxRMean;
+        return this;
+    }
+
+    public double getMaxRStd() {
+        return maxRStd;
+    }
+
+    public ParticlesState setMaxRStd(double maxRStd) {
+        this.maxRStd = maxRStd;
+        return this;
+    }
+
+    public boolean isMaxRStandard() {
+        return maxRStandard;
+    }
+
+    public ParticlesState setMaxRStandard(boolean maxRStandard) {
+        this.maxRStandard = maxRStandard;
+        return this;
+    }
+
+    public double getFriction() {
+        return friction;
+    }
+
+    public ParticlesState setFriction(double friction) {
+        this.friction = friction;
+        return this;
+    }
+
+    public double getG() {
+        return g;
+    }
+
+    public ParticlesState setG(double g) {
+        this.g = g;
+        return this;
+    }
+
+    public boolean isMolAttract() {
+        return molAttract;
+    }
+
+    public ParticlesState setMolAttract(boolean molAttract) {
+        this.molAttract = molAttract;
+        return this;
+    }
+
+    public boolean isGravAttract() {
+        return gravAttract;
+    }
+
+    public ParticlesState setGravAttract(boolean gravAttract) {
+        this.gravAttract = gravAttract;
+        return this;
+    }
+
+    public boolean isWallsActive() {
+        return wallsActive;
+    }
+
+    public ParticlesState setWallsActive(boolean wallsActive) {
+        this.wallsActive = wallsActive;
+        return this;
+    }
+
+    public ParticlesInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(ParticlesInfo info) {
+        this.info = info;
     }
 }
