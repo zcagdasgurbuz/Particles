@@ -3,36 +3,39 @@ package com.zeynelcgurbuz.particles;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class ParticlesInfo {
 
-    private ArrayList<Color> colors = new ArrayList<>();
-    private ArrayList<ArrayList<Double>> attractions = new ArrayList<>();
-    private ArrayList<ArrayList<Double>> minDistances = new ArrayList<>();
-    private ArrayList<ArrayList<Double>> maxDistances = new ArrayList<>();
+    private Color[] colors;
+    private double[][] attractions;
+    private double[][] minDistances;
+    private double[][] maxDistances;
 
     public void setSizes(int size){
-        colors = new ArrayList<>(Collections.nCopies(size, Color.WHITE));
-        attractions = new ArrayList<>(Collections.nCopies(size, new ArrayList<>(Collections.nCopies(size,0.0))));
-        minDistances = new ArrayList<>(Collections.nCopies(size, new ArrayList<>(Collections.nCopies(size,0.0))));
-        maxDistances = new ArrayList<>(Collections.nCopies(size, new ArrayList<>(Collections.nCopies(size,0.0))));
+
+        colors = new Color[size];
+        Arrays.fill(colors, Color.WHITE);
+        attractions = new double[size][size];
+        minDistances = new double[size][size];
+        maxDistances = new double[size][size];
     }
 
     public int size(){
-        return colors.size();
+        return colors.length;
     }
 
-    public void addColor(Color color){
+   /* public void addColor(Color color){
         colors.add(color);
-    }
+    }*/
 
     public void setColor(int type, Color color){
-        colors.set(type, color);
+        colors[type]  = color;
     }
 
     public Color getColor(int type){
-        return colors.get(type);
+        return colors[type];
     }
 
     /*public void addAttraction(double attraction){
@@ -40,11 +43,11 @@ public class ParticlesInfo {
     }
 */
     public void setAttraction(int type, int otherType, double attraction){
-        attractions.get(type).set(otherType, attraction);
+        attractions[type][otherType] = attraction;
     }
 
     public double getAttraction(int type, int otherType){
-        return attractions.get(type).get(otherType);
+        return attractions[type][otherType];
     }
 
 /*    public void addMinDistance(double minDistance){
@@ -52,11 +55,11 @@ public class ParticlesInfo {
     }*/
 
     public void setMinDistance(int type, int otherType, double minDistance){
-        minDistances.get(type).set(otherType, minDistance);
+        minDistances[type][otherType] = minDistance;
     }
     
     public double getMinDistance(int type, int otherType){
-        return minDistances.get(type).get(otherType);
+        return  minDistances[type][otherType];
     }
 
    /* public void addMaxDistance(double maxDistance){
@@ -64,10 +67,10 @@ public class ParticlesInfo {
     }*/
 
     public void setMaxDistance(int type, int otherType, double maxDistance){
-        maxDistances.get(type).set(otherType, maxDistance);
+        maxDistances[type][otherType] = maxDistance;
     }
 
     public double getMaxDistance(int type, int otherType){
-        return maxDistances.get(type).get(otherType);
+        return maxDistances[type][otherType];
     }
 }
