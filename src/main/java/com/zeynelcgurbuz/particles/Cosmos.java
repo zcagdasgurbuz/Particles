@@ -18,41 +18,15 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     private static final int MIN_RADIUS = 2;
 
     private static final Random random = new Random();
-/*
-    private final double minRMean;
-    private final double minRStd;
-    private final double maxRMean;
-    private final double maxRStd;
-    private final boolean minRStandard;
-    private final boolean attractionStandard;
-    private final boolean maxRStandard;
-    private final boolean negateSelfAttraction;*/
-
 
     private int startX;
     private int startY;
     private int width;
     private int height;
-    private Vector initialPositionVector = new Vector();
-
-/*    private double attractionMean;
-    private double attractionStd;
-    private double attractionMax;
-    private double attractionMin;
-    private double minRLower;
-    private double minRUpper;
-    private double maxRLower;
-    private double maxRUpper;
-    private double friction;*/
 
     private final ArrayList<Particle> particles;
     private GraphicsContext graphics;
 
-/*
-    private int particleCount;
-    private int colorCount;
-    private ParticlesInfo info;
-*/
 
 
     private Store<ParticlesState> store;
@@ -61,13 +35,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     private Subscription storeSubscription;
 
-/*    private double g;
-    private boolean molAttract;
-    private boolean gravAttract;
-    private boolean walls;
-    private int inRangeStyle;
-    private int belowRangeStyle;
-    private int outRangeStyle;*/
 
 
     public Cosmos(Store<ParticlesState> store, int width, int height) {
@@ -427,7 +394,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     private void drawCosmos() {
 
-        Vector initialPosition = store.getState().getMouseDragPosition();
+        Vector initialPosition =  new Vector();
+        if(!state.isWallsActive()) initialPosition = store.getState().getMouseDragPosition();
 
         graphics.clearRect(0, 0,
                 graphics.getCanvas().getWidth(), graphics.getCanvas().getHeight());
@@ -443,13 +411,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         }
     }
 
-    private void updatePositions() {
-        if (particles != null && particles.size() > 0) {
-            for (Particle particle : particles) {
-                particle.setPosition(particle.getPosition().add(initialPositionVector));
-            }
-        }
-    }
 
     @Override
     public void onChange(ParticlesState state) {
