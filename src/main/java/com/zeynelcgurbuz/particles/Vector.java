@@ -1,6 +1,8 @@
 package com.zeynelcgurbuz.particles;
 
-public class Vector {
+import java.io.Serializable;
+
+public class Vector implements Serializable {
 
     /** The Vector's x component. */
     public double x;
