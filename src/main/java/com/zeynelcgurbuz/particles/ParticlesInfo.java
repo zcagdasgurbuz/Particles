@@ -13,6 +13,25 @@ public class ParticlesInfo  implements Serializable {
     private double[][] minDistances;
     private double[][] maxDistances;
 
+    public ParticlesInfo(int size){
+        setSizes(size);
+    }
+
+    //deep copy!
+    public ParticlesInfo(ParticlesInfo info){
+        this.colors = Arrays.stream(info.colors).map(Color::toString).map(Color::web).toArray(Color[]::new);
+        this.attractions =  deepCopy(info.attractions);
+        this.minDistances = deepCopy(info.minDistances);
+        this.maxDistances = deepCopy(info.maxDistances);
+    }
+
+    private double[][] deepCopy(double[][] oldArray){
+        double[][] newArray = new double[oldArray.length][oldArray[0].length];
+        for (int i = 0; i < newArray.length; i++){
+            newArray[i] = Arrays.copyOf(oldArray[i], oldArray[i].length);}
+        return newArray;
+    }
+
     public void setSizes(int size){
         colors = new Color[size];
         Arrays.fill(colors, Color.WHITE);

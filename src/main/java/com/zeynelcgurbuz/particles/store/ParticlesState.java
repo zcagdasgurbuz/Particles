@@ -46,14 +46,51 @@ public class ParticlesState implements Serializable {
     private boolean gravAttract = false;
     private boolean wallsActive = true;
 
-    private ParticlesInfo info = new ParticlesInfo();
-
+    private ParticlesInfo info;
 
 
     public ParticlesState(Vector mouseDragPosition) {
         this.mouseDragPosition = mouseDragPosition;
+        info = new ParticlesInfo(colorCount);
     }
 
+    public ParticlesState(Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
+                          int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
+                          double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
+                          double maxRMean, double maxRStd, boolean maxRStandard, double attractionMin, double attractionMax,
+                          double attractionMean, double attractionStd, boolean attractionStandard, boolean negateSelfAttraction,
+                          double friction, double g, boolean molAttract, boolean gravAttract, boolean wallsActive,
+                          ParticlesInfo info) {
+        this.mouseDragPosition = mouseDragPosition;
+        this.forceFieldPosition = forceFieldPosition;
+        this.particleCount = particleCount;
+        this.colorCount = colorCount;
+        this.inRangeStyle = inRangeStyle;
+        this.belowRangeStyle = belowRangeStyle;
+        this.outRangeStyle = outRangeStyle;
+        this.minRLower = minRLower;
+        this.minRUpper = minRUpper;
+        this.minRMean = minRMean;
+        this.minRStd = minRStd;
+        this.minRStandard = minRStandard;
+        this.maxRLower = maxRLower;
+        this.maxRUpper = maxRUpper;
+        this.maxRMean = maxRMean;
+        this.maxRStd = maxRStd;
+        this.maxRStandard = maxRStandard;
+        this.attractionMin = attractionMin;
+        this.attractionMax = attractionMax;
+        this.attractionMean = attractionMean;
+        this.attractionStd = attractionStd;
+        this.attractionStandard = attractionStandard;
+        this.negateSelfAttraction = negateSelfAttraction;
+        this.friction = friction;
+        this.g = g;
+        this.molAttract = molAttract;
+        this.gravAttract = gravAttract;
+        this.wallsActive = wallsActive;
+        this.info = info;
+    }
 
 /*    public ParticlesState fromState(ParticlesState state) {
         if (items.equals(this.items)) {
@@ -63,14 +100,23 @@ public class ParticlesState implements Serializable {
         }
     }*/
 
+    public ParticlesState clone() {
+        return new ParticlesState(new Vector(mouseDragPosition), new Vector(forceFieldPosition),
+                particleCount, colorCount, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
+                attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
+                g, molAttract, gravAttract, wallsActive, new ParticlesInfo(info));
+    }
+
+
     @Override
-    public boolean equals(Object other){
-        if(other == this){
+    public boolean equals(Object other) {
+        if (other == this) {
             return true;
-        } else if ( !this.getClass().getName().equals(other.getClass().getName()) ) {
+        } else if (!this.getClass().getName().equals(other.getClass().getName())) {
             return false;
         }
-        ParticlesState otherState = (ParticlesState)other;
+        ParticlesState otherState = (ParticlesState) other;
         return mouseDragPosition.equals(otherState.mouseDragPosition);
     }
 
@@ -89,7 +135,7 @@ public class ParticlesState implements Serializable {
         return mouseDragPosition;
     }
 
-    public ParticlesState setMouseDragPosition(Vector mouseDragPosition){
+    public ParticlesState setMouseDragPosition(Vector mouseDragPosition) {
         this.mouseDragPosition = mouseDragPosition;
         return this;
     }

@@ -5,6 +5,7 @@ import com.zeynelcgurbuz.particles.animation.Animator;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
+import com.zeynelcgurbuz.particles.store.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -36,7 +37,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     private Subscription storeSubscription;
 
 
-
     public Cosmos(Store<ParticlesState> store, int width, int height) {
         this.store = store;
         storeSubscription = store.subscribe(this);
@@ -49,10 +49,12 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         setBoundaries(0, 0, width, height);
 
         this.state = store.getState();
-        state.getInfo().setSizes(state.getColorCount());
+        //state.getInfo().setSizes(state.getColorCount());
 
 
-        setRandomTypes();
+        //setRandomTypes();
+        store.dispatch(new GenerateRandomParticlesInfoAction());
+
         //**************************
         setRandomParticles();
     }
@@ -414,7 +416,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     @Override
     public void onChange(ParticlesState state) {
-        //this.state = state;
+        this.state = state;
 /*        if(!Arrays.equals(state.getMouseDragCoordinates(), new double[2])){
             this.initialPositionVector.x = state.getMouseDragCoordinates()[0];
             this.initialPositionVector.y = state.getMouseDragCoordinates()[1];

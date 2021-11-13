@@ -1,6 +1,5 @@
 package com.zeynelcgurbuz.particles;
 
-import com.zeynelcgurbuz.particles.redux.Reducer;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.store.ParticlesReducer;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
@@ -8,18 +7,21 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        ParticlesState state = new ParticlesState(new Vector());
+        ParticlesState state = new ParticlesState(new Vector(), new Vector(), 400, 5, 4,
+                5, -1, 10, 20, 0.0, 0.0, false,
+                30, 70, 0.0, 0.0, false, -1.0, 1.0,
+                0.5, 15.0, true, false, 0.25, 0.1, true,
+                false, true, new ParticlesInfo(5));
+
+
         ParticlesReducer reducer = new ParticlesReducer();
         Store<ParticlesState> store = new Store<>(state, reducer);
 
@@ -44,23 +46,23 @@ public class App extends Application {
             }
         };*/
 
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ui/main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ui/main-view.fxml"));
 
-            //FXMLLoader fxmlLoader = new FXMLLoader();
-            //fxmlLoader.setLocation(getClass().getClassLoader().getResource("/main-view.fxml"));
-            fxmlLoader.setControllerFactory((Class<?> type) -> {
-                try {
-                    for (Constructor<?> c : type.getConstructors()) {
-                        if (c.getParameterCount() == 1 && c.getParameterTypes()[0] == Store.class) {
-                            return c.newInstance(store);
-                        }
+        //FXMLLoader fxmlLoader = new FXMLLoader();
+        //fxmlLoader.setLocation(getClass().getClassLoader().getResource("/main-view.fxml"));
+        fxmlLoader.setControllerFactory((Class<?> type) -> {
+            try {
+                for (Constructor<?> c : type.getConstructors()) {
+                    if (c.getParameterCount() == 1 && c.getParameterTypes()[0] == Store.class) {
+                        return c.newInstance(store);
                     }
-                    // default behavior: invoke no-arg constructor:
-                    return type.newInstance();
-                } catch (Exception exc) {
-                    throw new RuntimeException(exc);
                 }
-            });
+                // default behavior: invoke no-arg constructor:
+                return type.newInstance();
+            } catch (Exception exc) {
+                throw new RuntimeException(exc);
+            }
+        });
 
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);

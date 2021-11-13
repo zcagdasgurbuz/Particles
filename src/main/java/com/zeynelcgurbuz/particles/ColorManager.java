@@ -28,7 +28,7 @@ public class ColorManager {
 
     }
 
-    static Color next(){
+    public static Color next(){
         if(currentIdx >= colors.size()){
           currentIdx = 0;
         }
