@@ -2,65 +2,73 @@ package com.zeynelcgurbuz.particles.store;
 
 import com.zeynelcgurbuz.particles.ParticlesInfo;
 import com.zeynelcgurbuz.particles.Vector;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ParticlesState implements Serializable {
     //private final List<String> items;
+
+    private double width;
+    private double height;
+
     private Vector mouseDragPosition;
     private Vector forceFieldPosition;
 
+    private int particleCount;
+    private int colorCount;
 
-    private int particleCount = 400;
-    private int colorCount = 5;
+    private int inRangeStyle;
+    private int belowRangeStyle;
+    private int outRangeStyle;
 
+    private double minRLower;
+    private double minRUpper;
+    private double minRMean;
+    private double minRStd;
+    private boolean minRStandard;
 
-    private int inRangeStyle = 4;
-    private int belowRangeStyle = 5;
-    private int outRangeStyle = 21;
+    private double attractionMin;
+    private double attractionMax;
+    private double attractionMean;
+    private double attractionStd;
+    private boolean attractionStandard;
+    private boolean negateSelfAttraction;
 
+    private double maxRLower;
+    private double maxRUpper;
+    private double maxRMean;
+    private double maxRStd;
+    private boolean maxRStandard;
 
-    private double minRLower = 10;
-    private double minRUpper = 20;
-    private double minRMean = 0.0;
-    private double minRStd = 0.0;
-    private boolean minRStandard = false;
+    private double friction;
+    private double g;
 
-    private double attractionMin = -1.0;
-    private double attractionMax = 1.0;
-    private double attractionMean = 0.5;
-    private double attractionStd = 15.0;
-    private boolean attractionStandard = true;
-    private boolean negateSelfAttraction = false;
-
-    private double maxRLower = 30.0;
-    private double maxRUpper = 70.0;
-    private double maxRMean = 0.0;
-    private double maxRStd = 0.0;
-    private boolean maxRStandard = false;
-
-    private double friction = 0.25;
-    private double g = 0.1; //gravity constant
-
-    private boolean molAttract = true;
-    private boolean gravAttract = false;
-    private boolean wallsActive = true;
+    private boolean molAttract;
+    private boolean gravAttract;
+    private boolean wallsActive;
 
     private ParticlesInfo info;
+    private GraphicsContext graphics;
+    private String name;
 
+    private boolean saveOnClose;
+    private transient StateManager manager;
 
-    public ParticlesState(Vector mouseDragPosition) {
-        this.mouseDragPosition = mouseDragPosition;
-        info = new ParticlesInfo(colorCount);
+    public ParticlesState(String name) {
+        this.name = name;
     }
 
-    public ParticlesState(Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
+    public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
                           int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
                           double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
                           double maxRMean, double maxRStd, boolean maxRStandard, double attractionMin, double attractionMax,
                           double attractionMean, double attractionStd, boolean attractionStandard, boolean negateSelfAttraction,
                           double friction, double g, boolean molAttract, boolean gravAttract, boolean wallsActive,
                           ParticlesInfo info) {
+        this.width = width;
+        this.height = height;
         this.mouseDragPosition = mouseDragPosition;
         this.forceFieldPosition = forceFieldPosition;
         this.particleCount = particleCount;
@@ -100,12 +108,26 @@ public class ParticlesState implements Serializable {
         }
     }*/
 
-    public ParticlesState clone() {
-        return new ParticlesState(new Vector(mouseDragPosition), new Vector(forceFieldPosition),
+    public ParticlesState copy() {
+        ParticlesState copy = new ParticlesState(width, height, new Vector(mouseDragPosition), new Vector(forceFieldPosition),
                 particleCount, colorCount, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
-                g, molAttract, gravAttract, wallsActive, new ParticlesInfo(info));
+                g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
+        copy.setGraphics(graphics);
+
+        return copy;
+    }
+
+    public ParticlesState shallowCopy() {
+        ParticlesState copy = new ParticlesState(width, height, mouseDragPosition, forceFieldPosition,
+                particleCount, colorCount, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
+                attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
+                g, molAttract, gravAttract, wallsActive, info);
+        copy.setGraphics(graphics);
+
+        return copy;
     }
 
 
@@ -117,19 +139,10 @@ public class ParticlesState implements Serializable {
             return false;
         }
         ParticlesState otherState = (ParticlesState) other;
-        return mouseDragPosition.equals(otherState.mouseDragPosition);
+        return name.equals(otherState.name);
     }
 
 
-/*    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder("TodoState (items=" + items.size() + ")[\n");
-
-        items.forEach(item -> builder.append("\t").append(item).append("\n"));
-
-        builder.append("]");
-        return builder.toString();
-    }*/
 
     public Vector getMouseDragPosition() {
         return mouseDragPosition;
@@ -137,6 +150,24 @@ public class ParticlesState implements Serializable {
 
     public ParticlesState setMouseDragPosition(Vector mouseDragPosition) {
         this.mouseDragPosition = mouseDragPosition;
+        return this;
+    }
+
+    public double getWidth(){
+        return width;
+    }
+
+    public ParticlesState setWidth(double width){
+        this.width = width;
+        return this;
+    }
+
+    public double getHeight(){
+        return height;
+    }
+
+    public ParticlesState setHeight(double height){
+        this.height = height;
         return this;
     }
 
@@ -381,4 +412,42 @@ public class ParticlesState implements Serializable {
     public void setInfo(ParticlesInfo info) {
         this.info = info;
     }
+
+    public GraphicsContext getGraphics(){
+        return  graphics;
+    }
+
+    public ParticlesState setGraphics(GraphicsContext graphics){
+        this.graphics = graphics;
+        return this;
+    }
+
+    public StateManager getManager() {
+        return manager;
+    }
+
+    public ParticlesState setManager(StateManager manager) {
+        this.manager = manager;
+        return this;
+    }
+
+    public boolean isSaveOnClose() {
+        return saveOnClose;
+    }
+
+    public ParticlesState setSaveOnClose(boolean saveOnClose) {
+        this.saveOnClose = saveOnClose;
+        return this;
+    }
+
+
+
+
+    public ParticlesState setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public String toString(){return name;}
 }

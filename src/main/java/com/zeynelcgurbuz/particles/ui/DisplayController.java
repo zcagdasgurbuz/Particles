@@ -5,8 +5,10 @@ import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.animation.Animator;
 import com.zeynelcgurbuz.particles.animation.ParticleAnimator;
 import com.zeynelcgurbuz.particles.redux.Store;
+import com.zeynelcgurbuz.particles.store.BoundariesChangedAction;
 import com.zeynelcgurbuz.particles.store.MouseDragAction;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
+import com.zeynelcgurbuz.particles.store.SetGraphicsContextAction;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -67,25 +69,18 @@ public class DisplayController {
 
         container.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
-        cosmos = new Cosmos(store,1200, 800);
+        //cosmos = new Cosmos(store,1200, 800);
         //cosmos.setBoundaries(0, 0, 600, 400);
         canvas.widthProperty().addListener((observable, oldValue, newValue) -> {
-            cosmos.setBoundaries(0, 0, (int) newValue.doubleValue(), (int) canvas.getHeight());
+            store.dispatch(new BoundariesChangedAction(newValue.doubleValue(), canvas.getHeight()));
+            //cosmos.setBoundaries(0, 0, (int) newValue.doubleValue(), (int) canvas.getHeight());
         });
         canvas.heightProperty().addListener((observable, oldValue, newValue) -> {
-            cosmos.setBoundaries(0, 0, (int) canvas.getWidth(), (int) newValue.doubleValue());
+            store.dispatch(new BoundariesChangedAction(canvas.getWidth(), newValue.doubleValue()));
+            //cosmos.setBoundaries(0, 0, (int) canvas.getWidth(), (int) newValue.doubleValue());
         });
-        animator = new ParticleAnimator(true);
-        cosmos.setGraphics(gr);
-        cosmos.setAnimator(animator);
-        animator.start();
-    }
 
-    public void startCosmos() {
-        gr.setFill(Color.WHITE);
-        gr.fillRect(50, 50, 50, 50);
-        System.out.println(canvas.getHeight());
-        System.out.println(canvas.getWidth());
+        store.dispatch(new SetGraphicsContextAction(gr));
     }
 
 

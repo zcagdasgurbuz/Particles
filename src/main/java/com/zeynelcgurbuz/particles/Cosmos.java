@@ -20,10 +20,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     private static final Random random = new Random();
 
-    private int startX;
-    private int startY;
-    private int width;
-    private int height;
 
     private final ArrayList<Particle> particles;
     private GraphicsContext graphics;
@@ -46,14 +42,16 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
 
         //**************************
-        setBoundaries(0, 0, width, height);
+        //setBoundaries(0, 0, width, height);
 
         this.state = store.getState();
         //state.getInfo().setSizes(state.getColorCount());
 
 
         //setRandomTypes();
-        store.dispatch(new GenerateRandomParticlesInfoAction());
+        if(state.getInfo() == null){
+            store.dispatch(new GenerateRandomParticlesInfoAction());
+        }
 
         //**************************
         setRandomParticles();
@@ -289,71 +287,24 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         double radius = particle.getRadius();
         Vector positionVector1 = particle.getPosition();
         Vector velocityVector1 = particle.getVelocity();
-        if (positionVector1.x < startX + radius) {
-            positionVector1.x = startX + radius;
+        if (positionVector1.x < radius) {
+            positionVector1.x = radius;
             velocityVector1.x = -velocityVector1.x;
         }
-        if (positionVector1.y < startY + radius) {
-            positionVector1.y = startY + radius;
+        if (positionVector1.y < radius) {
+            positionVector1.y = radius;
             velocityVector1.y = -velocityVector1.y;
         }
-        if (positionVector1.x > width - radius) {
-            positionVector1.x = width - radius;
+        if (positionVector1.x > state.getWidth() - radius) {
+            positionVector1.x = state.getWidth() - radius;
             velocityVector1.x = -velocityVector1.x;
         }
-        if (positionVector1.y > height - radius) {
-            positionVector1.y = height - radius;
+        if (positionVector1.y > state.getHeight() - radius) {
+            positionVector1.y = state.getHeight() - radius;
             velocityVector1.y = -velocityVector1.y;
         }
         particle.setPosition(positionVector1);
         particle.setVelocity(velocityVector1);
-    }
-
-    private void setRandomTypes() {
-
-        for (int i = 0; i < state.getInfo().size(); i++) {
-            state.getInfo().setColor(i, ColorManager.next());
-
-            for (int j = 0; j < state.getInfo().size(); j++) {
-                int sign = 1;
-                if(state.isNegateSelfAttraction() && i == j) sign = -1;
-                //set attractions
-                if(state.isAttractionStandard()) {
-                    state.getInfo().setAttraction(i, j,
-                            sign *
-                                    (state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())));
-                } else {
-                    state.getInfo().setAttraction(i, j,
-                            (state.getAttractionMin() + (state.getAttractionMax() - state.getAttractionMin()) *
-                                    random.nextDouble()));
-                }
-                //set maxRs
-                if(state.isMaxRStandard()){
-                    state.getInfo().setAttraction(i, j,
-                            (state.getMaxRMean() +  (state.getMaxRStd() * random.nextGaussian())));
-                } else {
-                    state.getInfo().setMaxDistance(i, j,
-                            (state.getMaxRLower() + (state.getMaxRUpper() - state.getMaxRLower()) *
-                                    random.nextDouble()));
-                }
-                //set minRs
-                if(state.isMinRStandard()) {
-                    state.getInfo().setAttraction(i, j,
-                        (state.getMinRMean() + (state.getMinRStd() * random.nextGaussian())));
-                } else {
-                    state.getInfo().setMinDistance(i, j,
-                            (state.getMinRLower() + (state.getMinRUpper() - state.getMinRLower()) *
-                                    random.nextDouble()));
-                }
-            }
-        }
-    }
-
-    public void setBoundaries(int startX, int startY, int width, int height) {
-        this.startX = startX;
-        this.startY = startY;
-        this.width = width;
-        this.height = height;
     }
 
     public void setRandomParticles() {
@@ -361,8 +312,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         for (int i = 0; i < state.getParticleCount(); i++) {
             Particle particle = new Particle();
             particle.setPosition(
-                    random.nextDouble() * (width - startX) + startX,
-                    random.nextDouble() * (height - startY) + startY);
+                    random.nextDouble() * state.getWidth(),
+                    random.nextDouble() * state.getHeight());
             int type = random.nextInt(state.getInfo().size());
             particle.setColor(state.getInfo().getColor(type));
             particle.setRadius(MIN_RADIUS);
@@ -390,14 +341,15 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         animator.attach(this);
     }
 
-    public void setGraphics(GraphicsContext graphics) {
+/*    public void setGraphics(GraphicsContext graphics) {
         this.graphics = graphics;
-    }
+    }*/
 
     private void drawCosmos() {
-
+        GraphicsContext graphics = state.getGraphics();
         Vector initialPosition =  new Vector();
         if(!state.isWallsActive()) initialPosition = store.getState().getMouseDragPosition();
+
 
         graphics.clearRect(0, 0,
                 graphics.getCanvas().getWidth(), graphics.getCanvas().getHeight());
