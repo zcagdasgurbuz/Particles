@@ -19,6 +19,8 @@ public class ParticlesState implements Serializable {
     private int particleCount;
     private int colorCount;
 
+    private double flatRadius;
+
     private int inRangeStyle;
     private int belowRangeStyle;
     private int outRangeStyle;
@@ -55,13 +57,14 @@ public class ParticlesState implements Serializable {
 
     private boolean saveOnClose;
     private transient StateManager manager;
+    private boolean restartRequested;
 
     public ParticlesState(String name) {
         this.name = name;
     }
 
     public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
-                          int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
+                          double flatRadius, int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
                           double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
                           double maxRMean, double maxRStd, boolean maxRStandard, double attractionMin, double attractionMax,
                           double attractionMean, double attractionStd, boolean attractionStandard, boolean negateSelfAttraction,
@@ -73,6 +76,7 @@ public class ParticlesState implements Serializable {
         this.forceFieldPosition = forceFieldPosition;
         this.particleCount = particleCount;
         this.colorCount = colorCount;
+        this.flatRadius = flatRadius;
         this.inRangeStyle = inRangeStyle;
         this.belowRangeStyle = belowRangeStyle;
         this.outRangeStyle = outRangeStyle;
@@ -110,7 +114,7 @@ public class ParticlesState implements Serializable {
 
     public ParticlesState copy() {
         ParticlesState copy = new ParticlesState(width, height, new Vector(mouseDragPosition), new Vector(forceFieldPosition),
-                particleCount, colorCount, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                particleCount, colorCount, flatRadius, inRangeStyle,  belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
@@ -121,7 +125,7 @@ public class ParticlesState implements Serializable {
 
     public ParticlesState shallowCopy() {
         ParticlesState copy = new ParticlesState(width, height, mouseDragPosition, forceFieldPosition,
-                particleCount, colorCount, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info);
@@ -141,7 +145,6 @@ public class ParticlesState implements Serializable {
         ParticlesState otherState = (ParticlesState) other;
         return name.equals(otherState.name);
     }
-
 
 
     public Vector getMouseDragPosition() {
@@ -168,6 +171,15 @@ public class ParticlesState implements Serializable {
 
     public ParticlesState setHeight(double height){
         this.height = height;
+        return this;
+    }
+
+    public double getFlatRadius() {
+        return flatRadius;
+    }
+
+    public ParticlesState setFlatRadius(double flatRadius) {
+        this.flatRadius = flatRadius;
         return this;
     }
 
@@ -440,7 +452,14 @@ public class ParticlesState implements Serializable {
         return this;
     }
 
+    public boolean isRestartRequested() {
+        return restartRequested;
+    }
 
+    public ParticlesState setRestartRequested(boolean restartRequested) {
+        this.restartRequested = restartRequested;
+        return this;
+    }
 
 
     public ParticlesState setName(String name) {
@@ -450,4 +469,5 @@ public class ParticlesState implements Serializable {
 
     @Override
     public String toString(){return name;}
+
 }

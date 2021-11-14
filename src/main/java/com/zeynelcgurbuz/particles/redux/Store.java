@@ -20,8 +20,8 @@ public class Store<S> {
         return this.currentState;
     }
 
-    public void dispatch(Object action) {
-        this.currentState = reducer.reduce(this.currentState, (Action) action);
+    public void dispatch(Action action) {
+        this.currentState = reducer.reduce(this.currentState, action);
         notifySubscribers();
     }
 

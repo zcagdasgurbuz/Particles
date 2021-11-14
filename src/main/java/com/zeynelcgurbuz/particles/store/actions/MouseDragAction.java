@@ -1,8 +1,7 @@
-package com.zeynelcgurbuz.particles.store;
+package com.zeynelcgurbuz.particles.store.actions;
 
 import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Action;
-import java.util.Arrays;
 
 public class MouseDragAction implements Action {
     private final Vector value;

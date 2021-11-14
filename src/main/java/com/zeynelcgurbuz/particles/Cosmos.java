@@ -5,10 +5,10 @@ import com.zeynelcgurbuz.particles.animation.Animator;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
-import com.zeynelcgurbuz.particles.store.GenerateRandomParticlesInfoAction;
+import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
+import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -308,7 +308,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     }
 
     public void setRandomParticles() {
-        if (particles.size() >= MAX_ATOMS) return;
+        particles.clear();
+        if (state.getParticleCount() >= MAX_ATOMS) return;
         for (int i = 0; i < state.getParticleCount(); i++) {
             Particle particle = new Particle();
             particle.setPosition(
@@ -316,7 +317,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                     random.nextDouble() * state.getHeight());
             int type = random.nextInt(state.getInfo().size());
             particle.setColor(state.getInfo().getColor(type));
-            particle.setRadius(MIN_RADIUS);
+            particle.setRadius(state.getFlatRadius());
             double vx = random.nextDouble() * 5;
             if (random.nextBoolean()) vx = -vx;
             double vy = random.nextDouble() * 5;
@@ -369,11 +370,9 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     @Override
     public void onChange(ParticlesState state) {
         this.state = state;
-/*        if(!Arrays.equals(state.getMouseDragCoordinates(), new double[2])){
-            this.initialPositionVector.x = state.getMouseDragCoordinates()[0];
-            this.initialPositionVector.y = state.getMouseDragCoordinates()[1];
-            updatePositions();
-            store.dispatch(new MouseDragStopAction());
-        }*/
+        if(state.isRestartRequested()){
+            setRandomParticles();
+            store.dispatch(new RestartFulfilledAction());
+        }
     }
 }

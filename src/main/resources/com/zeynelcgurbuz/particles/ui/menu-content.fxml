@@ -11,31 +11,262 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ComboBox?>
 <ScrollPane fitToHeight="true" prefWidth="300.0" styleClass="menuContainer" xmlns="http://javafx.com/javafx/11.0.2"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zeynelcgurbuz.particles.ui.MenuContentController">
     <content>
 
         <VBox spacing="5.0">
             <children>
-                <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                <ScrollPane>
+                    <content>
+                        <VBox spacing="10">
+                            <padding>
+                                <Insets top="10" left="3" />
+                            </padding>
+                            <HBox spacing="10">
+                                <VBox spacing="5">
+                                    <Label text="Gravitational Attraction"/>
+                                    <Label text="Moleculer Attraction"/>
+                                    <Label text="Enclosed with walls"/>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <CheckBox fx:id="gravitationalAttr"/>
+                                    <CheckBox fx:id="molecularAttr"/>
+                                    <CheckBox fx:id="isWallsActive"/>
+                                </VBox>
+                            </HBox>
+                            <VBox spacing="5">
+                                <HBox spacing="10">
+                                    <Label text="In range attr. style"  prefWidth="180"/>
+                                    <ComboBox fx:id="inRangeStyle"/>
+                                </HBox>
+                                <HBox spacing="10">
+                                    <Label text="Below range attr. style" prefWidth="180"/>
+                                    <ComboBox fx:id="belowRangeStyle"/>
+                                </HBox>
+                                <HBox spacing="10">
+                                    <Label text="Out range attr. style" prefWidth="180"/>
+                                    <ComboBox fx:id="outRangeStyle"/>
+                                </HBox>
+                            </VBox>
+                            <HBox spacing="10">
+                                <VBox>
+                                    <Label text="G constant"/>
+                                    <Spinner editable="true" styleClass="double-spinner" fx:id="gSpinner">
+                                        <valueFactory>
+                                            <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="10.0" amountToStepBy="0.0001"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Friction"/>
+                                    <Spinner editable="true" styleClass="double-spinner" fx:id="frictionSpinner">
+                                        <valueFactory >
+                                            <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0000" max="1.00000" amountToStepBy="0.0001"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </VBox>
+                            </HBox>
+                            <Separator prefWidth="280"/>
+                            <Separator prefWidth="280"/>
+                            <HBox spacing="5">
+                                <VBox>
+                                    <Label text="# Particles"/>
+                                    <Spinner editable="true" fx:id="particlesCountSpinner" prefWidth="90">
+                                        <valueFactory>
+                                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="400" amountToStepBy="1"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </VBox>
+                                <VBox>
+                                    <Label text="# Types" />
+                                    <Spinner editable="true" fx:id="particleTypesSpinner" prefWidth="90">
+                                        <valueFactory>
+                                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="12" amountToStepBy="1"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Radius" />
+                                    <Spinner editable="true" fx:id="flatRadiusSpinner" prefWidth="90">
+                                        <valueFactory>
+                                            <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="50.0" amountToStepBy="0.01"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </VBox>
+
+                            </HBox>
+                            <Separator prefWidth="280"/>
+                            <VBox spacing="5">
+                                <HBox spacing="10">
+                                    <Label text="Attr. Standard Distribution" prefWidth="200"/>
+                                    <CheckBox fx:id="attractionStandard"/>
+                                </HBox>
+                                <HBox spacing="10" visible="${attractionStandard.selected}" managed="${attractionStandard.selected}">
+                                    <VBox>
+                                        <Label text="Attr. Mean"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="attrMean">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="-30.0" max="30.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Attr. Std"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="attrStd">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory  min="-30.0" max="30.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                                <HBox spacing="10" visible="${!attractionStandard.selected}" managed="${!attractionStandard.selected}">
+                                    <VBox>
+                                        <Label text="Attr. Min"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="attrMin">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="-30.0" max="30.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Attr. Max"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="attrMax">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="-30.0" max="30.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                                <HBox spacing="10">
+                                    <Label text="Negate self attraction" prefWidth="200"/>
+                                    <CheckBox fx:id="negateSelfAttr"/>
+                                </HBox>
+                            </VBox>
+                            <Separator prefWidth="280"/>
+                            <VBox spacing="5">
+                                <HBox spacing="10">
+                                    <Label text="Min R Standard Distribution" prefWidth="200"/>
+                                    <CheckBox fx:id="minRStandard"/>
+                                </HBox>
+                                <HBox spacing="10" visible="${minRStandard.selected}" managed="${minRStandard.selected}">
+                                    <VBox>
+                                        <Label text="Min R Mean"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="minRMean">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Min R Std"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="minRStd">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory  min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                                <HBox spacing="10" visible="${!minRStandard.selected}" managed="${!minRStandard.selected}">
+                                    <VBox>
+                                        <Label text="Min R Min"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="minRMin">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Min R Max"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="minRMax">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                            <Separator prefWidth="280"/>
+                            <VBox spacing="5">
+                                <HBox spacing="10">
+                                    <Label text="Max R Standard Distribution" prefWidth="200"/>
+                                    <CheckBox fx:id="maxRStandard"/>
+                                </HBox>
+                                <HBox spacing="10" visible="${maxRStandard.selected}" managed="${maxRStandard.selected}">
+                                    <VBox>
+                                        <Label text="Max R Mean"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="maxRMean">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Max R Std"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="maxRStd">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory  min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                                <HBox spacing="10" visible="${!maxRStandard.selected}" managed="${!maxRStandard.selected}">
+                                    <VBox>
+                                        <Label text="Max R Min"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="maxRMin">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Max R Max"/>
+                                        <Spinner editable="true" styleClass="double-spinner" fx:id="maxRMax">
+                                            <valueFactory >
+                                                <SpinnerValueFactory.DoubleSpinnerValueFactory min="0.0" max="500.0" amountToStepBy="0.0001"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                            <HBox spacing="10">
+                                <Button text="Restart" fx:id="restartButton" onAction="#restartButton"/>
+                                <Label text="RESTART REQUIRED" fx:id="restartRequiredAlert"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+                <Region prefWidth="295.0" VBox.vgrow="ALWAYS"/>
                 <Accordion>
                     <panes>
                         <TitledPane animated="false" text="Save \ Load">
-                            <Label text="Configuration Name"/>
-                            <TextField fx:id="configNameField"/>
-                            <ListView fx:id="configNamesListView" prefHeight="149.0"/>
-                            <HBox fillHeight="false" spacing="10.0">
-                                <children>
-                                    <Button fx:id="saveButton" disable="true" mnemonicParsing="false"
-                                            onAction="#saveButtonAction" prefWidth="75.0" text="Save"/>
-                                    <Region HBox.hgrow="ALWAYS"/>
-                                    <Button fx:id="loadButton" disable="true" mnemonicParsing="false"
-                                            onAction="#loadButtonAction" prefWidth="75.0" text="Load"/>
-                                    <Region HBox.hgrow="ALWAYS"/>
-                                    <Button fx:id="removeButton" disable="true" mnemonicParsing="false"
-                                            onAction="#removeButtonAction" prefWidth="75.0" text="Remove"/>
-                                </children>
-                            </HBox>
+                            <ScrollPane>
+                                <content>
+                                    <Label text="Configuration Name"/>
+                                    <TextField fx:id="configNameField"/>
+                                    <ListView fx:id="configNamesListView" prefHeight="149.0"/>
+                                    <HBox fillHeight="false" spacing="10.0">
+                                        <children>
+                                            <Button fx:id="saveButton" disable="true" mnemonicParsing="false"
+                                                    onAction="#saveButtonAction" prefWidth="75.0" text="Save"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Button fx:id="loadButton" disable="true" mnemonicParsing="false"
+                                                    onAction="#loadButtonAction" prefWidth="75.0" text="Load"/>
+                                            <Region HBox.hgrow="ALWAYS"/>
+                                            <Button fx:id="removeButton" disable="true" mnemonicParsing="false"
+                                                    onAction="#removeButtonAction" prefWidth="75.0" text="Remove"/>
+                                        </children>
+                                    </HBox>
+                                </content>
+                            </ScrollPane>
+
                         </TitledPane>
                     </panes>
                 </Accordion>

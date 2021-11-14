@@ -4,7 +4,6 @@ import com.zeynelcgurbuz.particles.animation.ParticleAnimator;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.store.ParticlesReducer;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
-import com.zeynelcgurbuz.particles.store.SetStateAction;
 import com.zeynelcgurbuz.particles.store.StateManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,14 +23,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
 
         StateManager manager = StateManager.INSTANCE;
-        ParticlesState dummy = new ParticlesState(0,0, null, null, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                false, 0, 0, 0, 0, false, 0,
-        0, 0, 0, false, false, 0, 0,
-                false, false, false, null);
-        dummy.setManager(manager);
+        manager.dummy.setManager(manager);
         ParticlesReducer reducer = new ParticlesReducer();
-        store = new Store<>(dummy, reducer);
+        store = new Store<>(manager.dummy, reducer);
         manager.setStore(store);
         manager.initialize();
 

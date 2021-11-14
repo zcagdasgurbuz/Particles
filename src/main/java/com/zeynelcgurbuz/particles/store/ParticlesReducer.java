@@ -5,6 +5,16 @@ import com.zeynelcgurbuz.particles.ParticlesInfo;
 import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Action;
 import com.zeynelcgurbuz.particles.redux.Reducer;
+import com.zeynelcgurbuz.particles.store.actions.AppCloseAction;
+import com.zeynelcgurbuz.particles.store.actions.BoundariesChangedAction;
+import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
+import com.zeynelcgurbuz.particles.store.actions.MouseDragAction;
+import com.zeynelcgurbuz.particles.store.actions.MouseDragStopAction;
+import com.zeynelcgurbuz.particles.store.actions.RestartAction;
+import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
+import com.zeynelcgurbuz.particles.store.actions.SetGraphicsContextAction;
+import com.zeynelcgurbuz.particles.store.actions.SetSaveOnCloseAction;
+import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 
 import java.util.Random;
 
@@ -19,6 +29,13 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
                 newState.getManager().saveState(newState, newState.getManager().LAST_STATE);
             }
             return newState;
+        } else if (action instanceof RestartAction) {
+            ParticlesState state = oldState.copy();
+            setRandomTypes(state);
+            state.setRestartRequested(true);
+            return state;
+        } else if (action instanceof RestartFulfilledAction) {
+            return oldState.shallowCopy().setRestartRequested(false);
         } else if (action instanceof SetSaveOnCloseAction) {
             return oldState.shallowCopy().setSaveOnClose(((SetSaveOnCloseAction) action).getSaveOnClose());
         } else if (action instanceof SetGraphicsContextAction) {

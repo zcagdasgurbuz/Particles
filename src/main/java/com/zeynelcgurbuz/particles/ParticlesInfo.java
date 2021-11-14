@@ -77,4 +77,5 @@ public class ParticlesInfo implements Serializable {
     public double getMaxDistance(int type, int otherType) {
         return maxDistances[type][otherType];
     }
+
 }

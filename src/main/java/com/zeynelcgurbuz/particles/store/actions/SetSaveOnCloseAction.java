@@ -1,4 +1,4 @@
-package com.zeynelcgurbuz.particles.store;
+package com.zeynelcgurbuz.particles.store.actions;
 
 public class SetSaveOnCloseAction {
     boolean saveOnClose;

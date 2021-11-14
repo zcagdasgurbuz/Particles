@@ -140,3 +140,20 @@
     -fx-background-color: transparent;
     -fx-box-border: transparent;
 }
+
+
+/* ------------------------------------------------------- */
+/*                      Menu Context                       */
+/* ------------------------------------------------------- */
+
+.separator {
+
+    -fx-stroke: white;
+    -fx-fill: white;
+    -fx-background-color: white;
+}
+
+.double-spinner {
+
+}
+

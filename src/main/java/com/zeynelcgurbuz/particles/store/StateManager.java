@@ -2,6 +2,7 @@ package com.zeynelcgurbuz.particles.store;
 
 import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Store;
+import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -16,10 +17,16 @@ public enum StateManager {
     INSTANCE;
 
     private ParticlesState defaultState = new ParticlesState(1200, 800, (new Vector()), (new Vector()), 400,
-            5, 4, 5, -1, 10, 20, 0.0,
+            5, 2, 4, 5, -1, 10, 20, 0.0,
             0.0, false, 30, 70, 0.0, 0.0, false,
             -1.0, 1.0, 0.5, 15.0, true,
             false, 0.25, 0.1, true, false, true, null);
+
+    public ParticlesState dummy = new ParticlesState(0,0, null, null, 0,
+            0, 1, 0, 0, 0, 0, 0, 0, 0,
+            false, 0, 0, 0, 0, false, 0,
+            0, 0, 0, false, false, 0, 0,
+            false, false, false, null);
 
     private static final String CONFIG_FILE_NAME = "savedStates.particles";
     public static final String LAST_STATE = "Lyex^H-58_-vwxt^";
