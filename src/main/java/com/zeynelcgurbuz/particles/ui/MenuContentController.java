@@ -4,13 +4,13 @@ import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
-import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
+import com.zeynelcgurbuz.particles.store.actions.SaveRequestAction;
 import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,11 +20,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 public class MenuContentController implements Subscriber<ParticlesState> {
 
@@ -42,9 +44,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     public CheckBox molecularAttr;
     public CheckBox isWallsActive;
     //
-    public ComboBox inRangeStyle;
-    public ComboBox belowRangeStyle;
-    public ComboBox outRangeStyle;
+    public ComboBox<String> inRangeStyle;
+    public ComboBox<String> belowRangeStyle;
+    public ComboBox<String> outRangeStyle;
     //
     public Spinner<Integer> particlesCountSpinner;
     public Spinner<Integer> particleTypesSpinner;
@@ -65,7 +67,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     public Spinner<Double> maxRMax;
     public Button restartButton;
     public Label restartRequiredAlert;
-
+    public BooleanProperty saveLoadExpanded;
 
 
     private Subscription storeSubscription = null;
@@ -74,6 +76,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     private ParticlesState state;
     private StringConverter<Double> converter = null;
     @FXML public BooleanProperty needRecalculation;
+    ObservableList<String> funcs = null;
 
     MenuContentController(){}
 
@@ -81,6 +84,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         //super();
         this.store = store;
         needRecalculation = new SimpleBooleanProperty(false);
+        saveLoadExpanded = new SimpleBooleanProperty(false);
         converter = new StringConverter<Double>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
             @Override public String toString(Double value) {
@@ -112,6 +116,27 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             }
         };
 
+        ArrayList<String> funcsArray = new ArrayList<>();
+        funcsArray.add("<<not defined>>");
+        funcsArray.add("attr1 + attr2");
+        funcsArray.add("attr1 - attr2");
+        funcsArray.add("attr2 - attr1");
+        funcsArray.add("(attr1 * attr2) / r^2");
+        funcsArray.add("-(attr1 * attr2) / r^2");
+        funcsArray.add("(attr1 + attr2) / r^2");
+        funcsArray.add("(attr1 - attr2) / r^2");
+        funcsArray.add("(attr2 - attr1) / r^2");
+        funcsArray.add("1 / r^2");
+        funcsArray.add("-1 / r^2");
+        funcsArray.add("attr1");
+        funcsArray.add("attr2");
+        funcsArray.add("-attr1");
+        funcsArray.add("-attr2");
+        funcsArray.add("attr1 / r^2");
+        funcsArray.add("attr2 / r^2");
+        funcsArray.add("-attr1 / r^2");
+        funcsArray.add("-attr2 / r^2");
+        funcs = FXCollections.observableArrayList(funcsArray);
     }
 
     @FXML
@@ -135,8 +160,21 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         maxRMax.getValueFactory().setConverter(converter);
         restartRequiredAlert.visibleProperty().bind(needRecalculation);
         restartRequiredAlert.setTextFill(Color.RED);
+        inRangeStyle.setItems(funcs);
+        belowRangeStyle.setItems(funcs);
+        outRangeStyle.setItems(funcs);
         setValues();
         setListeners();
+        configNameField.textProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(newValue.length() <= 0));
+        configNamesListView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() >= 0) {
+                loadButton.setDisable(false);
+                removeButton.setDisable(false);
+            } else {
+                loadButton.setDisable(true);
+                removeButton.setDisable(true);
+            }
+        });
     }
 
     private void setValues(){
@@ -148,6 +186,10 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         molecularAttr.setSelected(state.isMolAttract());
         isWallsActive.setSelected(state.isWallsActive());
         //combooooox
+        inRangeStyle.getSelectionModel().select(state.getInRangeStyle());
+        belowRangeStyle.getSelectionModel().select(state.getBelowRangeStyle());
+        outRangeStyle.getSelectionModel().select(state.getOutRangeStyle());
+        //
         particlesCountSpinner.getValueFactory().setValue(state.getParticleCount());
         particleTypesSpinner.getValueFactory().setValue(state.getColorCount());
         flatRadiusSpinner.getValueFactory().setValue(state.getFlatRadius());
@@ -165,6 +207,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         maxRStd.getValueFactory().setValue(state.getMaxRStd());
         maxRMin.getValueFactory().setValue(state.getMaxRLower());
         maxRMax.getValueFactory().setValue(state.getMaxRUpper());
+        configNamesListView.setItems(state.getManager().getStates());
     }
 
     private void setListeners(){
@@ -185,7 +228,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             state.setMaxRStandard(newValue);
             needRecalculation.set(true);
         });
-
         particlesCountSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
             state.setParticleCount(newValue);
             needRecalculation.set(true);
@@ -246,6 +288,18 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             state.setMaxRUpper(newValue);
             needRecalculation.set(true);
         });
+        inRangeStyle.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            state.setInRangeStyle(newValue.intValue());
+            requestSetState();
+        });
+        belowRangeStyle.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            state.setBelowRangeStyle(newValue.intValue());
+            requestSetState();
+        });
+        outRangeStyle.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            state.setOutRangeStyle(newValue.intValue());
+            requestSetState();
+        });
         gravitationalAttr.selectedProperty().addListener((observable, oldValue, newValue) -> {
             state.setGravAttract(newValue);
             requestSetState();
@@ -268,16 +322,20 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         });
     }
 
-
     //save load state...
     public void saveButtonAction(ActionEvent actionEvent) {
+        String name = configNameField.textProperty().get();
+        if(state.getManager().requestSave(name))
+        configNameField.textProperty().set("");
     }
 
     public void loadButtonAction(ActionEvent actionEvent) {
+        state.getManager().requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
+        needRecalculation.set(false);
     }
 
     public void removeButtonAction(ActionEvent actionEvent) {
-
+        state.getManager().requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
     }
 
     private void requestSetState(){
@@ -286,7 +344,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
 
     @Override
     public void onChange(ParticlesState state) {
-        this.state = state;
+        this.state = state.shallowCopy();
         setValues();
     }
 

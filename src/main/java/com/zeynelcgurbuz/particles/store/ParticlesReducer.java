@@ -61,7 +61,7 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
         Random random = new Random();
         state.setInfo(new ParticlesInfo(state.getColorCount()));
         for (int i = 0; i < state.getInfo().size(); i++) {
-            state.getInfo().setColor(i, ColorManager.next());
+            state.getInfo().setColor(i, ColorManager.next().toString());
 
             for (int j = 0; j < state.getInfo().size(); j++) {
                 int sign = 1;

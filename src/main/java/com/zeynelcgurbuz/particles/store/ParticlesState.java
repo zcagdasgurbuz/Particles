@@ -52,7 +52,7 @@ public class ParticlesState implements Serializable {
     private boolean wallsActive;
 
     private ParticlesInfo info;
-    private GraphicsContext graphics;
+    private transient GraphicsContext graphics;
     private String name;
 
     private boolean saveOnClose;
@@ -119,7 +119,8 @@ public class ParticlesState implements Serializable {
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
         copy.setGraphics(graphics);
-
+        copy.setManager(manager);
+        copy.setName(name);
         return copy;
     }
 
@@ -130,20 +131,16 @@ public class ParticlesState implements Serializable {
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info);
         copy.setGraphics(graphics);
-
+        copy.setManager(manager);
+        copy.setName(name);
         return copy;
     }
 
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        } else if (!this.getClass().getName().equals(other.getClass().getName())) {
-            return false;
-        }
-        ParticlesState otherState = (ParticlesState) other;
-        return name.equals(otherState.name);
+        return ((other == this) || (other != null && other.getClass().getName().equals(this.getClass().getName()) &&
+                name.equals(((ParticlesState)other).name)));
     }
 
 

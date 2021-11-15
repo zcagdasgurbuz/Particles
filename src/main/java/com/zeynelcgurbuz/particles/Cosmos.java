@@ -9,6 +9,7 @@ import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoActi
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -316,7 +317,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                     random.nextDouble() * state.getWidth(),
                     random.nextDouble() * state.getHeight());
             int type = random.nextInt(state.getInfo().size());
-            particle.setColor(state.getInfo().getColor(type));
+            particle.setColor(Color.web(state.getInfo().getColor(type)));
             particle.setRadius(state.getFlatRadius());
             double vx = random.nextDouble() * 5;
             if (random.nextBoolean()) vx = -vx;

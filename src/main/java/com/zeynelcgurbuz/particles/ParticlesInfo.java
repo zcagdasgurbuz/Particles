@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class ParticlesInfo implements Serializable {
 
-    private Color[] colors;
+    private String[] colors;
     private double[][] attractions;
     private double[][] minDistances;
     private double[][] maxDistances;
@@ -19,7 +19,8 @@ public class ParticlesInfo implements Serializable {
 
     //deep copy!
     public ParticlesInfo(ParticlesInfo info) {
-        this.colors = Arrays.stream(info.colors).map(Color::toString).map(Color::web).toArray(Color[]::new);
+        //this.colors = Arrays.stream(info.colors).map(Color::toString).map(Color::web).toArray(Color[]::new);
+        this.colors = Arrays.copyOf(info.colors, info.colors.length);
         this.attractions = deepCopy(info.attractions);
         this.minDistances = deepCopy(info.minDistances);
         this.maxDistances = deepCopy(info.maxDistances);
@@ -35,8 +36,8 @@ public class ParticlesInfo implements Serializable {
     }
 
     public void setSizes(int size) {
-        colors = new Color[size];
-        Arrays.fill(colors, Color.WHITE);
+        colors = new String[size];
+        Arrays.fill(colors, "0xFFF");
         attractions = new double[size][size];
         minDistances = new double[size][size];
         maxDistances = new double[size][size];
@@ -46,11 +47,11 @@ public class ParticlesInfo implements Serializable {
         return colors.length;
     }
 
-    public void setColor(int type, Color color) {
+    public void setColor(int type, String color) {
         colors[type] = color;
     }
 
-    public Color getColor(int type) {
+    public String getColor(int type) {
         return colors[type];
     }
 
