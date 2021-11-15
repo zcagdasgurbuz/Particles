@@ -4,6 +4,7 @@ import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
+import com.zeynelcgurbuz.particles.store.StateManager;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
 import com.zeynelcgurbuz.particles.store.actions.SaveRequestAction;
 import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
@@ -67,7 +68,8 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     public Spinner<Double> maxRMax;
     public Button restartButton;
     public Label restartRequiredAlert;
-    public BooleanProperty saveLoadExpanded;
+
+    public CheckBox startupLastState;
 
 
     private Subscription storeSubscription = null;
@@ -77,14 +79,16 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     private StringConverter<Double> converter = null;
     @FXML public BooleanProperty needRecalculation;
     ObservableList<String> funcs = null;
+    private StateManager manager;
 
     MenuContentController(){}
 
-    public MenuContentController(Store<ParticlesState> store){
+    public MenuContentController(Store<ParticlesState> store, StateManager manager){
         //super();
         this.store = store;
+        this.manager = manager;
         needRecalculation = new SimpleBooleanProperty(false);
-        saveLoadExpanded = new SimpleBooleanProperty(false);
+
         converter = new StringConverter<Double>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
             @Override public String toString(Double value) {
@@ -207,7 +211,8 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         maxRStd.getValueFactory().setValue(state.getMaxRStd());
         maxRMin.getValueFactory().setValue(state.getMaxRLower());
         maxRMax.getValueFactory().setValue(state.getMaxRUpper());
-        configNamesListView.setItems(state.getManager().getStates());
+        configNamesListView.setItems(manager.getStates());
+        startupLastState.setSelected(manager.isSaveOnClose());
     }
 
     private void setListeners(){
@@ -320,22 +325,25 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             state.setFriction(newValue);
             requestSetState();
         });
+        startupLastState.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            manager.setSaveOnClose(newValue);
+        });
     }
 
     //save load state...
     public void saveButtonAction(ActionEvent actionEvent) {
         String name = configNameField.textProperty().get();
-        if(state.getManager().requestSave(name))
+        if(manager.requestSave(name))
         configNameField.textProperty().set("");
     }
 
     public void loadButtonAction(ActionEvent actionEvent) {
-        state.getManager().requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
+        manager.requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
         needRecalculation.set(false);
     }
 
     public void removeButtonAction(ActionEvent actionEvent) {
-        state.getManager().requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
+        manager.requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
     }
 
     private void requestSetState(){

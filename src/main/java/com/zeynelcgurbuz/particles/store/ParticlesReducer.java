@@ -22,13 +22,7 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
     @Override
     public ParticlesState reduce(ParticlesState oldState, Action action) {
         if (action instanceof SetStateAction) {
-            return ((SetStateAction) action).getState().setGraphics(oldState.getGraphics()).setManager(oldState.getManager());
-        } else if (action instanceof AppCloseAction) {
-            ParticlesState newState = oldState.shallowCopy();
-            if(newState.isSaveOnClose()){
-                newState.getManager().saveState(newState, newState.getManager().LAST_STATE);
-            }
-            return newState;
+            return ((SetStateAction) action).getState().setGraphics(oldState.getGraphics());
         } else if (action instanceof RestartAction) {
             ParticlesState state = oldState.copy();
             setRandomTypes(state);
@@ -36,8 +30,6 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
             return state;
         } else if (action instanceof RestartFulfilledAction) {
             return oldState.shallowCopy().setRestartRequested(false);
-        } else if (action instanceof SetSaveOnCloseAction) {
-            return oldState.shallowCopy().setSaveOnClose(((SetSaveOnCloseAction) action).getSaveOnClose());
         } else if (action instanceof SetGraphicsContextAction) {
             return oldState.shallowCopy().setGraphics(((SetGraphicsContextAction) action).getGraphics());
         } else if (action instanceof MouseDragAction) {

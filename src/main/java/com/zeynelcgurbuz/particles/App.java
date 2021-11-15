@@ -15,22 +15,17 @@ import java.lang.reflect.Constructor;
 
 public class App extends Application {
 
-    Store<ParticlesState> store;
-    boolean saveOnClose;
-
+    StateManager manager;
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        StateManager manager = StateManager.INSTANCE;
-        manager.dummy.setManager(manager);
+        manager = StateManager.INSTANCE;
         ParticlesReducer reducer = new ParticlesReducer();
-        store = new Store<>(manager.dummy, reducer);
+        Store<ParticlesState> store = new Store<>(manager.dummy, reducer);
+        //save / load service
         manager.setStore(store);
         manager.initialize();
-
-        //store.dispatch(new SetStateAction(defaultState));
-
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ui/main-view.fxml"));
 
@@ -40,6 +35,10 @@ public class App extends Application {
                 for (Constructor<?> c : type.getConstructors()) {
                     if (c.getParameterCount() == 1 && c.getParameterTypes()[0] == Store.class) {
                         return c.newInstance(store);
+                    }
+                    if (c.getParameterCount() == 2 && c.getParameterTypes()[0] == Store.class &&
+                            c.getParameterTypes()[1] == StateManager.class) {
+                        return c.newInstance(store, manager);
                     }
                 }
                 // default behavior, if store is not expected
@@ -70,7 +69,7 @@ public class App extends Application {
 
     @Override
     public void stop(){
-
+        manager.saveIfStartupWithLast();
     }
 
     public static void main(String[] args) {

@@ -55,8 +55,6 @@ public class ParticlesState implements Serializable {
     private transient GraphicsContext graphics;
     private String name;
 
-    private boolean saveOnClose;
-    private transient StateManager manager;
     private boolean restartRequested;
 
     public ParticlesState(String name) {
@@ -119,7 +117,6 @@ public class ParticlesState implements Serializable {
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
         copy.setGraphics(graphics);
-        copy.setManager(manager);
         copy.setName(name);
         return copy;
     }
@@ -131,7 +128,6 @@ public class ParticlesState implements Serializable {
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info);
         copy.setGraphics(graphics);
-        copy.setManager(manager);
         copy.setName(name);
         return copy;
     }
@@ -428,24 +424,6 @@ public class ParticlesState implements Serializable {
 
     public ParticlesState setGraphics(GraphicsContext graphics){
         this.graphics = graphics;
-        return this;
-    }
-
-    public StateManager getManager() {
-        return manager;
-    }
-
-    public ParticlesState setManager(StateManager manager) {
-        this.manager = manager;
-        return this;
-    }
-
-    public boolean isSaveOnClose() {
-        return saveOnClose;
-    }
-
-    public ParticlesState setSaveOnClose(boolean saveOnClose) {
-        this.saveOnClose = saveOnClose;
         return this;
     }
 

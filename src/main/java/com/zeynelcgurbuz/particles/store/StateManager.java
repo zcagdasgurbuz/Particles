@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public enum StateManager {
     INSTANCE;
+    private boolean saveOnClose;
 
     private ParticlesState defaultState = new ParticlesState(1200, 800, (new Vector()), (new Vector()), 400,
             5, 2, 4, 5, 0, 10, 20, 0.0,
@@ -46,8 +47,10 @@ public enum StateManager {
 
         ParticlesState last = searchSavedLastState();
         if (last != null) {
-
+            saveOnClose = true;
+            store.dispatch(new SetStateAction(last));
         } else {
+            saveOnClose = false;
             defaultState.setName("default");
             store.dispatch(new SetStateAction(defaultState));
         }
@@ -57,10 +60,20 @@ public enum StateManager {
         return states;
     }
 
-    public boolean checkNameIfExists(String name) {
-        ParticlesState temp = new ParticlesState(name);
-        return states.contains(temp);
+    public void setSaveOnClose(boolean saveOnClose) {
+        this.saveOnClose = saveOnClose;
     }
+
+    public boolean isSaveOnClose() {
+        return saveOnClose;
+    }
+
+    public void saveIfStartupWithLast(){
+        if(saveOnClose){
+            requestSave(LAST_STATE);
+        }
+    }
+
 
     public boolean requestSave(String name) {
         boolean okToSave;
@@ -133,16 +146,10 @@ public enum StateManager {
         if (idx >= 0) {
             last = states.get(idx);
             states.remove(idx);
+            writeStates();
             return last;
         }
         return null;
-    }
-
-
-    public void saveState(ParticlesState state, String name) {
-        state.setName(name);
-        states.add(state);
-        writeStates();
     }
 
     public void setStore(Store<ParticlesState> store) {

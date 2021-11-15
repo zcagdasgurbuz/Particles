@@ -251,7 +251,11 @@
                                 <TitledPane  fx:id="titledPane" prefWidth="280.0" animated="false" text="Save \ Load">
                                     <ScrollPane fitToHeight="true" minHeight="5">
                                     <content>
-                                    <VBox spacing="5" >
+                                    <VBox spacing="5">
+                                        <HBox spacing="5">
+                                            <Label text="Startup with last state"/>
+                                            <CheckBox fx:id="startupLastState" />
+                                        </HBox>
                                         <Label text="Configuration Name"/>
                                         <TextField fx:id="configNameField"/>
                                         <ListView fx:id="configNamesListView" prefHeight="149.0"/>

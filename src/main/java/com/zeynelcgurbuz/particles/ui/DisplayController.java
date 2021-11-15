@@ -4,6 +4,7 @@ import com.zeynelcgurbuz.particles.Cosmos;
 import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.animation.Animator;
 import com.zeynelcgurbuz.particles.redux.Store;
+import com.zeynelcgurbuz.particles.store.StateManager;
 import com.zeynelcgurbuz.particles.store.actions.BoundariesChangedAction;
 import com.zeynelcgurbuz.particles.store.actions.MouseDragAction;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
@@ -39,6 +40,7 @@ public class DisplayController {
 
     private ObjectBinding<Point2D> center;
     private Store<ParticlesState> store;
+
 
     public DisplayController(Store<ParticlesState> store){
         this.store = store;
