@@ -5,7 +5,6 @@ import com.zeynelcgurbuz.particles.ParticlesInfo;
 import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Action;
 import com.zeynelcgurbuz.particles.redux.Reducer;
-import com.zeynelcgurbuz.particles.store.actions.AppCloseAction;
 import com.zeynelcgurbuz.particles.store.actions.BoundariesChangedAction;
 import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.actions.MouseDragAction;
@@ -13,7 +12,6 @@ import com.zeynelcgurbuz.particles.store.actions.MouseDragStopAction;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
 import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
 import com.zeynelcgurbuz.particles.store.actions.SetGraphicsContextAction;
-import com.zeynelcgurbuz.particles.store.actions.SetSaveOnCloseAction;
 import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 
 import java.util.Random;
@@ -57,21 +55,21 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
             state.getInfo().setColor(i, ColorManager.next().toString());
 
             for (int j = 0; j < state.getInfo().size(); j++) {
-                int sign = 1;
-                if (state.isNegateSelfAttraction() && i == j) sign = -1;
                 //set attractions
                 if (state.isAttractionStandard()) {
-                    state.getInfo().setAttraction(i, j,
-                            sign *
+                    state.getInfo().setAttraction(i, j,  state.isNegateSelfAttraction() && i == j ?
+                                    -Math.abs(state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())) :
                                     (state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())));
                 } else {
-                    state.getInfo().setAttraction(i, j,
+                    state.getInfo().setAttraction(i, j, state.isNegateSelfAttraction() && i == j ?
+                            -Math.abs(state.getAttractionMin() + (state.getAttractionMax() - state.getAttractionMin()) *
+                                    random.nextDouble()) :
                             (state.getAttractionMin() + (state.getAttractionMax() - state.getAttractionMin()) *
-                                    random.nextDouble()));
+                            random.nextDouble()));
                 }
                 //set maxRs
                 if (state.isMaxRStandard()) {
-                    state.getInfo().setAttraction(i, j,
+                    state.getInfo().setMaxDistance(i, j,
                             (state.getMaxRMean() + (state.getMaxRStd() * random.nextGaussian())));
                 } else {
                     state.getInfo().setMaxDistance(i, j,
@@ -80,7 +78,7 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
                 }
                 //set minRs
                 if (state.isMinRStandard()) {
-                    state.getInfo().setAttraction(i, j,
+                    state.getInfo().setMinDistance(i, j,
                             (state.getMinRMean() + (state.getMinRStd() * random.nextGaussian())));
                 } else {
                     state.getInfo().setMinDistance(i, j,

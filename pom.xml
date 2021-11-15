@@ -28,25 +28,26 @@
             <version>15.0.1</version>
         </dependency>
 
-         <dependency>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-graphics </artifactId>
-          <version>15.0.1</version>
-          <classifier>win</classifier>
-      </dependency>
-      <dependency>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-graphics </artifactId>
-          <version>15.0.1</version>
-          <classifier>linux</classifier>
-      </dependency>
-      <dependency>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-graphics </artifactId>
-          <version>15.0.1</version>
-          <classifier>mac</classifier>
-      </dependency>
-
+        <!--uber jar dependency start-->
+<!--        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>15.0.1</version>
+            <classifier>win</classifier>
+        </dependency>-->
+<!--        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>15.0.1</version>
+            <classifier>linux</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>15.0.1</version>
+            <classifier>mac</classifier>
+        </dependency>-->
+        <!--uber jar dependency end-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -109,7 +110,7 @@
                             </mainClass>
                             <launcher>launch</launcher>
                             <compress>2</compress>
-                            <jlinkZipName>fractalMatic</jlinkZipName>
+                            <jlinkZipName>Particles</jlinkZipName>
                             <noManPages>true</noManPages>
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>

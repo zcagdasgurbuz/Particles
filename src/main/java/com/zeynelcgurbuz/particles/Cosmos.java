@@ -106,7 +106,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             } else if (indexOfParticle != idx && distance < particle1MinAttractionRadius
                     && distance < particle2MinAttractionRadius) {
                 applyForceBasedOnStyle(delta, particle1, particle2, distance, state.getBelowRangeStyle());
-            } else {
+            } else if(indexOfParticle != idx && distance > particle1MaxAttractionRadius
+                    && distance > particle2MaxAttractionRadius) {
                 applyForceBasedOnStyle(delta, particle1, particle2, distance, state.getOutRangeStyle());
             }
         }
@@ -327,16 +328,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             //particle.setVelocity(0, 0);
             particles.add(particle);
         }
-
-
-        //add a big particle
-/*        Particle particle = new Particle();
-        particle.setPosition(600,400);
-
-        particle.setRadius(50);
-        particle.setColor(Color.YELLOW);
-        particle.setVelocity(0, 0);
-        particles.add(particle);*/
     }
 
     public void setAnimator(Animator animator) {
