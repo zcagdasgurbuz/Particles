@@ -6,7 +6,6 @@ import com.zeynelcgurbuz.particles.redux.Subscription;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 import com.zeynelcgurbuz.particles.store.StateManager;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
-import com.zeynelcgurbuz.particles.store.actions.SaveRequestAction;
 import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

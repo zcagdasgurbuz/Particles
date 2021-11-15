@@ -6,12 +6,14 @@
 
     <groupId>com.zeynelcgurbuz</groupId>
     <artifactId>particles</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>particles</name>
-
+    <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.7.1</junit.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -26,6 +28,25 @@
             <version>15.0.1</version>
         </dependency>
 
+         <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics </artifactId>
+          <version>15.0.1</version>
+          <classifier>win</classifier>
+      </dependency>
+      <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics </artifactId>
+          <version>15.0.1</version>
+          <classifier>linux</classifier>
+      </dependency>
+      <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics </artifactId>
+          <version>15.0.1</version>
+          <classifier>mac</classifier>
+      </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -39,7 +60,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -52,16 +72,46 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>com.zeynelcgurbuz.particles.AppLauncher</Main-Class>
+                                        <Build-Number>123</Build-Number>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <executions>
                     <execution>
                         <!-- Default configuration for running with: mvn clean javafx:run -->
+                        <!--https://www.youtube.com/watch?v=yG8YCLYccVo-->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.zeynelcgurbuz.particles/com.zeynelcgurbuz.particles.HelloApplication
+                            <mainClass>com.zeynelcgurbuz.particles.AppLauncher
                             </mainClass>
+                            <launcher>launch</launcher>
+                            <compress>2</compress>
+                            <jlinkZipName>fractalMatic</jlinkZipName>
+                            <noManPages>true</noManPages>
+                            <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
                     </execution>
                 </executions>

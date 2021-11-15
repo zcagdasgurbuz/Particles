@@ -22,7 +22,8 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
     @Override
     public ParticlesState reduce(ParticlesState oldState, Action action) {
         if (action instanceof SetStateAction) {
-            return ((SetStateAction) action).getState().setGraphics(oldState.getGraphics());
+            return ((SetStateAction) action).getState().setGraphics(oldState.getGraphics())
+                    .setWidth(oldState.getWidth()).setHeight(oldState.getHeight());
         } else if (action instanceof RestartAction) {
             ParticlesState state = oldState.copy();
             setRandomTypes(state);
