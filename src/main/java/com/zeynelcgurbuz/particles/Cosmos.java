@@ -8,6 +8,8 @@ import com.zeynelcgurbuz.particles.redux.Subscription;
 import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -54,27 +56,33 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     @Override
     public void update(double timePassedFromLastFrame) {
 
-        for (int thisIdx = 0; thisIdx < particles.size(); thisIdx++) {
-            Particle particle1 = particles.get(thisIdx);
 
-            //apply attractions
-            if (state.isMolAttract()) applyAttractionMolecular(thisIdx);
-            if (state.isGravAttract()) applyAttraction(thisIdx, timePassedFromLastFrame);
-            if (state.isWallsActive()) performWallCollisions(thisIdx);
+        Task<Void> task = new Task<Void>() {
 
-            performParticleCollisions(thisIdx);
+            @Override protected Void call() throws Exception {
+                for (int thisIdx = 0; thisIdx < particles.size(); thisIdx++) {
+                    Particle particle1 = particles.get(thisIdx);
+                    //apply attractions
+                    if (state.isMolAttract()) applyAttractionMolecular(thisIdx);
+                    if (state.isGravAttract()) applyAttraction(thisIdx, timePassedFromLastFrame);
+                    if (state.isWallsActive()) performWallCollisions(thisIdx);
+                    performParticleCollisions(thisIdx);
+                    //double time = timePassedFromLastFrame/1000000000.0;
+                    //update position
+                    particle1.setPosition(particle1.getPosition().add(particle1.getVelocity()));
+                    //friction
+                    particle1.setVelocity(particle1.getVelocity().scale(1.0 - state.getFriction()));
+                }
+                return null;
+            }
 
-            //double time = timePassedFromLastFrame/1000000000.0;
+            @Override protected void succeeded() {
+                super.succeeded();
+                Platform.runLater(()-> drawCosmos());
+            }
+        };
 
-
-            //update position
-            particle1.setPosition(particle1.getPosition().add(particle1.getVelocity()));
-            //friction
-            particle1.setVelocity(particle1.getVelocity().scale(1.0 - state.getFriction()));
-
-        }
-
-        drawCosmos();
+        new Thread(task).start();
     }
 
     private void applyAttractionMolecular(int indexOfParticle) {
