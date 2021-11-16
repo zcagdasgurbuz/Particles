@@ -4,7 +4,8 @@ import com.zeynelcgurbuz.particles.redux.Action;
 
 public class BoundariesChangedAction implements Action {
 
-    private double width, height;
+    private final double width;
+    private final double height;
 
     public BoundariesChangedAction(double width, double height){
         this.width = width;

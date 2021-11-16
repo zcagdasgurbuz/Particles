@@ -4,7 +4,7 @@ import com.zeynelcgurbuz.particles.animation.ParticleAnimator;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.store.ParticlesReducer;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
-import com.zeynelcgurbuz.particles.store.StateManager;
+import com.zeynelcgurbuz.particles.store.SaveLoadService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,30 +15,31 @@ import java.lang.reflect.Constructor;
 
 public class App extends Application {
 
-    StateManager manager;
+    SaveLoadService saveLoadService;
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        manager = StateManager.INSTANCE;
+        saveLoadService = SaveLoadService.INSTANCE;
         ParticlesReducer reducer = new ParticlesReducer();
-        Store<ParticlesState> store = new Store<>(manager.dummy, reducer);
+        Store<ParticlesState> store = new Store<>(saveLoadService.dummy, reducer);
         //save / load service
-        manager.setStore(store);
-        manager.initialize();
+        saveLoadService.setStore(store);
+        saveLoadService.initialize();
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ui/main-view.fxml"));
-
-        //inject store to the classes that have only constructor param and expect store
+        //inject store and manager to the classes that needs them
         fxmlLoader.setControllerFactory((Class<?> type) -> {
             try {
                 for (Constructor<?> c : type.getConstructors()) {
+                    //only one param and expects store
                     if (c.getParameterCount() == 1 && c.getParameterTypes()[0] == Store.class) {
                         return c.newInstance(store);
                     }
+                    //two params expect store and manager
                     if (c.getParameterCount() == 2 && c.getParameterTypes()[0] == Store.class &&
-                            c.getParameterTypes()[1] == StateManager.class) {
-                        return c.newInstance(store, manager);
+                            c.getParameterTypes()[1] == SaveLoadService.class) {
+                        return c.newInstance(store, saveLoadService);
                     }
                 }
                 // default behavior, if store is not expected
@@ -47,8 +48,6 @@ public class App extends Application {
                 throw new RuntimeException(exc);
             }
         });
-
-
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         //change font face
         scene.getStylesheets()
@@ -59,7 +58,6 @@ public class App extends Application {
         stage.setTitle("Particles!");
         stage.setScene(scene);
         stage.show();
-
         //generate cosmos and animator, then connect them.
         ParticleAnimator animator = new ParticleAnimator(true);
         Cosmos cosmos = new Cosmos(store,1200, 800);
@@ -69,7 +67,7 @@ public class App extends Application {
 
     @Override
     public void stop(){
-        manager.saveIfStartupWithLast();
+        saveLoadService.saveIfStartupWithLast();
     }
 
     public static void main(String[] args) {

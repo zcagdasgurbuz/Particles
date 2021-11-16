@@ -1,7 +1,5 @@
 package com.zeynelcgurbuz.particles.ui;
 
-//import com.jfoenix.controls.JFXHamburger;
-//import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -16,7 +14,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -28,10 +25,8 @@ public class SlidingMenuController {
 
     /** The sliding menu container. */
     public StackPane slidingMenu;
-    /** The hamburger menu button. */
-    //public JFXHamburger hamburgerMenuButton;
-    /** The menu content. */
-    public VBox circlesMenu;
+
+
     public Button menuButton;
     public AnchorPane hamburgerShape;
     public Rectangle topLine;
@@ -43,9 +38,6 @@ public class SlidingMenuController {
     private boolean isOpen;
     /** The timeline of sliding animation. */
     private Timeline timeline;
-    /** The hamburger menu button animation */
-    //private HamburgerBackArrowBasicTransition burgerTask;
-    //private HamburgerSlideCloseTransition burgerTask; // different animation
 
     /**
      * Initialize method.

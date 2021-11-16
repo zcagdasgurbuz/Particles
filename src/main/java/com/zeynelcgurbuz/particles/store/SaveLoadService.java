@@ -15,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public enum StateManager {
+public enum SaveLoadService {
     INSTANCE;
     private boolean saveOnClose;
 

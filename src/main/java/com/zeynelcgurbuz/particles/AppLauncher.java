@@ -1,7 +1,7 @@
 package com.zeynelcgurbuz.particles;
 
 /**
- * The app launcher - is a work around for multi-platform package.
+ * The app launcher - is a workaround for multi-platform package.
  */
 public class AppLauncher {
     /**

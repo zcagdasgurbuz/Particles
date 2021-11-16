@@ -18,47 +18,27 @@ import java.util.Random;
 
 public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
-    private static final int MAX_ATOMS = 1000;
-    private static final int MIN_RADIUS = 2;
-
-    private static final Random random = new Random();
-
-
-    private final ArrayList<Particle> particles;
-    private GraphicsContext graphics;
-
-
-
-    private Store<ParticlesState> store;
+    private final Random random = new Random();
+    private final ArrayList<Particle> particles = new ArrayList<>();
+    private final Store<ParticlesState> store;
     private ParticlesState state;
-    private boolean updated;
-
     private Subscription storeSubscription;
 
 
     public Cosmos(Store<ParticlesState> store, int width, int height) {
         this.store = store;
         storeSubscription = store.subscribe(this);
-
-        particles = new ArrayList<>();
-        //**************************
-
         this.state = store.getState();
-
+        //if no particle type info generate one
         if(state.getInfo() == null){
             store.dispatch(new GenerateRandomParticlesInfoAction());
         }
-
-        //**************************
         setRandomParticles();
     }
 
     @Override
     public void update(double timePassedFromLastFrame) {
-
-
         Task<Void> task = new Task<Void>() {
-
             @Override protected Void call() throws Exception {
                 for (int thisIdx = 0; thisIdx < particles.size(); thisIdx++) {
                     Particle particle1 = particles.get(thisIdx);
@@ -75,18 +55,16 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 }
                 return null;
             }
-
+            //ready to draw
             @Override protected void succeeded() {
                 super.succeeded();
                 Platform.runLater(()-> drawCosmos());
             }
         };
-
         new Thread(task).start();
     }
 
     private void applyAttractionMolecular(int indexOfParticle) {
-
         Particle particle1 = particles.get(indexOfParticle);
         for (int idx = 0; idx < particles.size(); idx++) {
             Particle particle2 = particles.get(idx);
@@ -97,7 +75,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             Vector delta = Vector.subtract(particle2.getPosition(), particle1.getPosition());
             double distance = delta.norm();
             delta.unitVector();
-
             if (indexOfParticle != idx
                     && distance <= particle1MaxAttractionRadius
                     && distance <= particle2MaxAttractionRadius
@@ -192,19 +169,16 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 particle1.setVelocity(particle1.getVelocity().add(vector));
                 break;
             default:
-                //
+                //yo!
         }
     }
 
-
-    //
     //https://www.vobarian.com/collisions/2dcollisions2.pdf
-    private boolean performParticleCollisions(int indexOfParticle) {
+    private void performParticleCollisions(int indexOfParticle) {
         for (int otherIdx = 0; otherIdx < particles.size(); otherIdx++) {
             Particle particle1 = particles.get(indexOfParticle);
             if (indexOfParticle != otherIdx) {
                 Particle particle2 = particles.get(otherIdx);
-
                 double radius = particle1.getRadius() + particle2.getRadius();
                 //Step 1: n=〈 x2−x1, y2−y1〉
                 Vector normalVector = Vector.subtract(particle1.getPosition(), particle2.getPosition());
@@ -215,7 +189,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                     Vector unitNormalVector = new Vector(normalVector).unitVector();
                     particle1.setPosition(particle1.getPosition().add(unitNormalVector.scale(rDifference)));
                     particle2.setPosition(particle2.getPosition().add(unitNormalVector.scale(-rDifference)));
-
                     //Step 1:  find the unit vector of n, which we will call, also normal vector get recalculated,
                     //since we moved the particles to the collision point
                     normalVector = Vector.subtract(particle1.getPosition(), particle2.getPosition());
@@ -236,26 +209,21 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                     double v2t = unitTangentVector.dot(velocityVector2);
                     //Step 4:  Find the new tangential velocities (after the collision). The new tangential
                     //velocities are simply equal to the old ones, v1t = v1tFinal, v2t = v2tFinal
-
                     // Step 5, Find the final normal velocities. This is where we use the one-dimensional collision formulas
                     double m1 = particle1.getMass();
                     double m2 = particle2.getMass();
                     double v1nFinal = (v1n * (m1 - m2) + 2.0 * m2 * v2n) / (m1 + m2);
                     double v2nFinal = (v2n * (m2 - m1) + 2.0 * m1 * v1n) / (m1 + m2);
-
                     // Step 6: Convert the scalar normal and tangential velocities into vectors
                     Vector v1nVector = new Vector(unitNormalVector).scale(v1nFinal);
                     Vector v1tVector = new Vector(unitTangentVector).scale(v1t);
                     particle1.setVelocity(v1nVector.add(v1tVector));
-
                     Vector v2nVector = new Vector(unitNormalVector).scale(v2nFinal);
                     Vector v2tVector = new Vector(unitTangentVector).scale(v2t);
                     particle2.setVelocity(v2nVector.add(v2tVector));
-                    return true;
                 }
             }
         }
-        return false;
     }
 
     private void applyAttraction(int indexOfParticle, double timePassedFromLastUpdate) {
@@ -312,13 +280,13 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     public void setRandomParticles() {
         particles.clear();
-        if (state.getParticleCount() >= MAX_ATOMS) return;
         for (int i = 0; i < state.getParticleCount(); i++) {
             Particle particle = new Particle();
             particle.setPosition(
                     random.nextDouble() * state.getWidth(),
                     random.nextDouble() * state.getHeight());
             int type = random.nextInt(state.getInfo().size());
+            particle.setType(type);
             particle.setColor(Color.web(state.getInfo().getColor(type)));
             particle.setRadius(state.getFlatRadius());
             double vx = random.nextDouble() * 5;
@@ -331,22 +299,19 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         }
     }
 
+
     public void setAnimator(Animator animator) {
         animator.attach(this);
     }
-
-/*    public void setGraphics(GraphicsContext graphics) {
-        this.graphics = graphics;
-    }*/
 
     private void drawCosmos() {
         GraphicsContext graphics = state.getGraphics();
         Vector initialPosition =  new Vector();
         if(!state.isWallsActive()) initialPosition = store.getState().getMouseDragPosition();
-
-
+        //clear previous frame
         graphics.clearRect(0, 0,
                 graphics.getCanvas().getWidth(), graphics.getCanvas().getHeight());
+        //draw all particles
         for (Particle particle : particles) {
             graphics.setFill(particle.getColor());
             double radius = particle.getRadius();
@@ -355,10 +320,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             graphics.fillOval(particle.getPosition().x - radius + initialPosition.x,
                     particle.getPosition().y - radius + initialPosition.y,
                     diameter, diameter);
-
         }
     }
-
 
     @Override
     public void onChange(ParticlesState state) {

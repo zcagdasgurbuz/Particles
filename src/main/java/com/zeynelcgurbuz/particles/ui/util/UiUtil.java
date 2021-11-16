@@ -23,10 +23,9 @@ public class UiUtil {
     public static final UiUtil tools = new UiUtil();
 
     /**
-     * Instantiates a new Ui util.
+     * Prevents instantiation.
      */
     private UiUtil() {
-
     }
 
     /**
@@ -63,7 +62,7 @@ public class UiUtil {
     }
 
     /**
-     * Shows quick popup message with given message at the right side of the given source. If message is error,
+     * Shows quick popup message with given message on the right side of the given source. If message is error,
      * message color is red
      *
      * @param source  the source

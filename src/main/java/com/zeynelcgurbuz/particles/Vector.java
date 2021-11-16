@@ -40,7 +40,6 @@ public class Vector implements Serializable {
      *
      * @param v the source Vector
      */
-
     public Vector(Vector v) {
         this.x = v.x;
         this.y = v.y;
@@ -130,13 +129,6 @@ public class Vector implements Serializable {
         return this;
     }
 
-
-    public Vector divide(double s) {
-        this.x /= s;
-        this.y /= s;
-        return this;
-    }
-
     /**
      * Scale this Vector by 1 / norm(); return this Vector.
      * The result is a unit Vector parallel to the original.
@@ -154,10 +146,6 @@ public class Vector implements Serializable {
         return this;
     }
 
-    public void reset() {
-        x = 0;
-        y = 0;
-    }
 
     public boolean equals(Object other){
         if(this == other){

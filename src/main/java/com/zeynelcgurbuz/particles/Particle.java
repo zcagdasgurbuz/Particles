@@ -5,8 +5,6 @@ import javafx.scene.paint.Paint;
 
 public class Particle {
 
-
-
     private double x;
     private double y;
     private double radius;
@@ -16,22 +14,6 @@ public class Particle {
     private double velocityY;
     private Color color;
     private int type;
-
-    public Particle(double x, double y, double radius, double mass, double attractionConstant, double velocityX,
-                    double velocityY, Color color) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.mass = mass;
-        this.attractionConstant = attractionConstant;
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.color = color;
-    }
-
-    Particle() {
-
-    }
 
     public void setPosition(double x, double y) {
         this.x = x;
@@ -62,22 +44,11 @@ public class Particle {
         velocityY = velocityVector.y;
     }
 
-    /** Return the given Vector set to this particle's velocity. */
-    public Vector getVelocity(Vector v) {
-        v.x = this.velocityX;
-        v.y = this.velocityY;
-        return v;
-    }
 
     public Vector getVelocity() {
         return new Vector(velocityX, velocityY);
     }
 
-    public Vector getPosition(Vector p) {
-        p.x = x;
-        p.y = y;
-        return p;
-    }
 
     public Vector getPosition() {
         return new Vector(x, y);

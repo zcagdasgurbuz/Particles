@@ -4,7 +4,7 @@ import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
-import com.zeynelcgurbuz.particles.store.StateManager;
+import com.zeynelcgurbuz.particles.store.SaveLoadService;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
 import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 import javafx.beans.property.BooleanProperty;
@@ -20,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
@@ -70,27 +69,29 @@ public class MenuContentController implements Subscriber<ParticlesState> {
 
     public CheckBox startupLastState;
 
-
     private Subscription storeSubscription = null;
 
     private Store<ParticlesState> store;
     private ParticlesState state;
     private StringConverter<Double> converter = null;
-    @FXML public BooleanProperty needRecalculation;
+    @FXML
+    public BooleanProperty needRecalculation;
     ObservableList<String> funcs = null;
-    private StateManager manager;
+    private SaveLoadService saveLoadService;
 
-    MenuContentController(){}
+    MenuContentController() {
+    }
 
-    public MenuContentController(Store<ParticlesState> store, StateManager manager){
+    public MenuContentController(Store<ParticlesState> store, SaveLoadService saveLoadService) {
         //super();
         this.store = store;
-        this.manager = manager;
+        this.saveLoadService = saveLoadService;
         needRecalculation = new SimpleBooleanProperty(false);
-
         converter = new StringConverter<Double>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
-            @Override public String toString(Double value) {
+
+            @Override
+            public String toString(Double value) {
                 // If the specified value is null, return a zero-length String
                 if (value == null) {
                     return "";
@@ -98,7 +99,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
 
                 return df.format(value);
             }
-            @Override public Double fromString(String value) {
+
+            @Override
+            public Double fromString(String value) {
                 try {
                     // If the specified value is null or zero-length, return null
                     if (value == null) {
@@ -143,7 +146,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         storeSubscription = store.subscribe(this);
         this.state = store.getState();
         gSpinner.getValueFactory().setConverter(converter);
@@ -180,7 +183,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         });
     }
 
-    private void setValues(){
+    private void setValues() {
         attractionStandard.setSelected(state.isAttractionStandard());
         negateSelfAttr.setSelected(state.isNegateSelfAttraction());
         minRStandard.setSelected(state.isMinRStandard());
@@ -210,11 +213,11 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         maxRStd.getValueFactory().setValue(state.getMaxRStd());
         maxRMin.getValueFactory().setValue(state.getMaxRLower());
         maxRMax.getValueFactory().setValue(state.getMaxRUpper());
-        configNamesListView.setItems(manager.getStates());
-        startupLastState.setSelected(manager.isSaveOnClose());
+        configNamesListView.setItems(saveLoadService.getStates());
+        startupLastState.setSelected(saveLoadService.isSaveOnClose());
     }
 
-    private void setListeners(){
+    private void setListeners() {
 
         attractionStandard.selectedProperty().addListener((observable, oldValue, newValue) -> {
             state.setAttractionStandard(newValue);
@@ -325,27 +328,27 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             requestSetState();
         });
         startupLastState.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            manager.setSaveOnClose(newValue);
+            saveLoadService.setSaveOnClose(newValue);
         });
     }
 
     //save load state...
     public void saveButtonAction(ActionEvent actionEvent) {
         String name = configNameField.textProperty().get();
-        if(manager.requestSave(name))
-        configNameField.textProperty().set("");
+        if (saveLoadService.requestSave(name))
+            configNameField.textProperty().set("");
     }
 
     public void loadButtonAction(ActionEvent actionEvent) {
-        manager.requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
+        saveLoadService.requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
         needRecalculation.set(false);
     }
 
     public void removeButtonAction(ActionEvent actionEvent) {
-        manager.requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
+        saveLoadService.requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
     }
 
-    private void requestSetState(){
+    private void requestSetState() {
         store.dispatch(new SetStateAction(state));
     }
 

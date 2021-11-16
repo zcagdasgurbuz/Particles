@@ -24,13 +24,14 @@ public class ColorManager {
         colors.add(Color.web("#6495ed"));
         colors.add(Color.web("#00008b"));
     }
-    private ColorManager(){
 
+    private ColorManager() {
     }
 
-    public static Color next(){
-        if(currentIdx >= colors.size()){
-          currentIdx = 0;
+    public static Color next() {
+        //modulo con be used
+        if (currentIdx >= colors.size()) {
+            currentIdx = 0;
         }
         return colors.get(currentIdx++);
     }

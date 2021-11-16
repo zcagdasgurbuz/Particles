@@ -5,10 +5,9 @@ import com.zeynelcgurbuz.particles.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class ParticlesState implements Serializable {
-    //private final List<String> items;
+
 
     private double width;
     private double height;
@@ -102,17 +101,9 @@ public class ParticlesState implements Serializable {
         this.info = info;
     }
 
-/*    public ParticlesState fromState(ParticlesState state) {
-        if (items.equals(this.items)) {
-            return this;
-        } else {
-            return new TodoState(items);
-        }
-    }*/
-
     public ParticlesState copy() {
         ParticlesState copy = new ParticlesState(width, height, new Vector(mouseDragPosition), new Vector(forceFieldPosition),
-                particleCount, colorCount, flatRadius, inRangeStyle,  belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
@@ -136,7 +127,7 @@ public class ParticlesState implements Serializable {
     @Override
     public boolean equals(Object other) {
         return ((other == this) || (other != null && other.getClass().getName().equals(this.getClass().getName()) &&
-                name.equals(((ParticlesState)other).name)));
+                name.equals(((ParticlesState) other).name)));
     }
 
 
@@ -149,20 +140,20 @@ public class ParticlesState implements Serializable {
         return this;
     }
 
-    public double getWidth(){
+    public double getWidth() {
         return width;
     }
 
-    public ParticlesState setWidth(double width){
+    public ParticlesState setWidth(double width) {
         this.width = width;
         return this;
     }
 
-    public double getHeight(){
+    public double getHeight() {
         return height;
     }
 
-    public ParticlesState setHeight(double height){
+    public ParticlesState setHeight(double height) {
         this.height = height;
         return this;
     }
@@ -418,11 +409,11 @@ public class ParticlesState implements Serializable {
         this.info = info;
     }
 
-    public GraphicsContext getGraphics(){
-        return  graphics;
+    public GraphicsContext getGraphics() {
+        return graphics;
     }
 
-    public ParticlesState setGraphics(GraphicsContext graphics){
+    public ParticlesState setGraphics(GraphicsContext graphics) {
         this.graphics = graphics;
         return this;
     }
@@ -443,6 +434,8 @@ public class ParticlesState implements Serializable {
     }
 
     @Override
-    public String toString(){return name;}
+    public String toString() {
+        return name;
+    }
 
 }

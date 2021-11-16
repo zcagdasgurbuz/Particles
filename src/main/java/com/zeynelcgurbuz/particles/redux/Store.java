@@ -7,9 +7,9 @@ public class Store<S> {
 
     private S currentState;
 
-    private Reducer<S> reducer;
+    private final Reducer<S> reducer;
 
-    private List<Subscriber<S>> subscribers = new ArrayList<>();
+    private final List<Subscriber<S>> subscribers = new ArrayList<>();
 
     public Store(S initialState, Reducer<S> rootReducer) {
         this.currentState = initialState;
