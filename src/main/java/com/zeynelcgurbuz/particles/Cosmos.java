@@ -41,15 +41,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         particles = new ArrayList<>();
         //**************************
 
-
-        //**************************
-        //setBoundaries(0, 0, width, height);
-
         this.state = store.getState();
-        //state.getInfo().setSizes(state.getColorCount());
 
-
-        //setRandomTypes();
         if(state.getInfo() == null){
             store.dispatch(new GenerateRandomParticlesInfoAction());
         }
