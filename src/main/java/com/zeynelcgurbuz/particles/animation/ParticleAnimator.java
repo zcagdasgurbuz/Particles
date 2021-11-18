@@ -6,6 +6,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Particle animator implements Animator interface, which can be thought as a Subject. This animator notifies its
+ * dependents every frame by utilizing JavaFX Animation Timer.
+ */
 public class ParticleAnimator implements Animator {
 
     private final AnimationTimer animator;
@@ -15,6 +19,9 @@ public class ParticleAnimator implements Animator {
     private long previousFrame;
     private double timeBetweenLastTwoFrame;
 
+    /**
+     * Constructor, empty.
+     */
     public ParticleAnimator() {
         setAutoStartStop(false);
         particles = new HashSet<>();
@@ -33,6 +40,34 @@ public class ParticleAnimator implements Animator {
         };
     }
 
+    /**
+     * Set auto start stop.
+     *
+     * @param autoStartStop the auto start stop
+     */
+    public void setAutoStartStop(boolean autoStartStop){
+        this.autoStartStop = autoStartStop;
+    }
+
+    /**
+     * Handles start and stop of the animation.
+     */
+    private void handleStartStop() {
+        if (autoStartStop) {
+            active.set(particles.size() > 0);
+            if (active.get()) {
+                animator.start();
+            } else {
+                animator.stop();
+            }
+        }
+    }
+
+    /**
+     * Constructor, with autoStartStop
+     *
+     * @param autoStartStop the auto start stop flag, starts animation when an animatable is attached if it's true.
+     */
     public ParticleAnimator(boolean autoStartStop){
         this();
         setAutoStartStop(autoStartStop);
@@ -102,25 +137,6 @@ public class ParticleAnimator implements Animator {
     public void notifyNewFrame() {
         for (Animatable animatable : particles){
             animatable.update(timeBetweenLastTwoFrame);
-        }
-    }
-
-    public void setAutoStartStop(boolean autoStartStop){
-        this.autoStartStop = autoStartStop;
-    }
-
-
-    /**
-     * Handles start and stop of the animation.
-     */
-    private void handleStartStop() {
-        if (autoStartStop) {
-            active.set(particles.size() > 0);
-            if (active.get()) {
-                animator.start();
-            } else {
-                animator.stop();
-            }
         }
     }
 }
