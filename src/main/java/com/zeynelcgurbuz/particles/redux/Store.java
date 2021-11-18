@@ -63,7 +63,7 @@ public class Store<S> {
     }
 
     /**
-     * Subscribes a subscriber to the store. -calls onchage once
+     * Subscribes a subscriber to the store. -calls onchange once
      *
      * @param subscriber the subscriber
      * @return the subscription
@@ -71,7 +71,7 @@ public class Store<S> {
     public Subscription subscribe(Subscriber<S> subscriber) {
         subscribers.add(subscriber);
         subscriber.onChange(this.currentState);
-        //instantiate a new subscription and return
+        //instantiate a new subscription on fly and return
         return () -> subscribers.remove(subscriber);
     }
 

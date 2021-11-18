@@ -16,6 +16,9 @@ import com.zeynelcgurbuz.particles.store.actions.SetStateAction;
 
 import java.util.Random;
 
+/**
+ * The reducer function, handles the actions.
+ */
 public class ParticlesReducer implements Reducer<ParticlesState> {
     @Override
     public ParticlesState reduce(ParticlesState oldState, Action action) {
@@ -47,7 +50,11 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
         return oldState;
     }
 
-
+    /**
+     * Sets random types on given state, helper.
+     *
+     * @param state the state
+     */
     private void setRandomTypes(ParticlesState state) {
         Random random = new Random();
         state.setInfo(new ParticlesInfo(state.getColorCount()));
@@ -88,6 +95,4 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
             }
         }
     }
-
-
 }
