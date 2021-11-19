@@ -9,6 +9,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -65,6 +67,11 @@ public class App extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/img/icon.png")).toExternalForm()));
         stage.setTitle("Particles");
         stage.setScene(scene);
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (KeyCode.F11.equals(event.getCode())) {
+                stage.setFullScreen(!stage.isFullScreen());
+            }
+        });
         stage.show();
         //generate cosmos and animator, then connect them.
         ParticleAnimator animator = new ParticleAnimator(true);
