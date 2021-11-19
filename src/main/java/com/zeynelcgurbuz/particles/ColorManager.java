@@ -4,8 +4,17 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+/**
+ * Color manager, fake random color generator.
+ */
 public class ColorManager {
+    /**
+     * The constant colors.
+     */
     private static final ArrayList<Color> colors = new ArrayList<>();
+    /**
+     * The constant currentIdx.
+     */
     private static int currentIdx = 0;
 
     static {
@@ -25,14 +34,19 @@ public class ColorManager {
         colors.add(Color.web("#00008b"));
     }
 
+    /**
+     * Instantiates a new Color manager.
+     */
     private ColorManager() {
     }
 
+    /**
+     * Next color.
+     *
+     * @return the color
+     */
     public static Color next() {
-        //modulo con be used
-        if (currentIdx >= colors.size()) {
-            currentIdx = 0;
-        }
+        currentIdx %= colors.size();
         return colors.get(currentIdx++);
     }
 

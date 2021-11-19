@@ -8,13 +8,21 @@ import com.zeynelcgurbuz.particles.store.SaveLoadService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.Objects;
 
+/**
+ * The app class, actual starting point of the application
+ */
 public class App extends Application {
 
+    /**
+     * The Save load service.
+     */
     SaveLoadService saveLoadService;
 
     @Override
@@ -54,13 +62,13 @@ public class App extends Application {
                 .add("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400;500;700;800&display=swap");
         // attach style sheet
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-
-        stage.setTitle("Particles!");
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/img/icon.png")).toExternalForm()));
+        stage.setTitle("Particles");
         stage.setScene(scene);
         stage.show();
         //generate cosmos and animator, then connect them.
         ParticleAnimator animator = new ParticleAnimator(true);
-        Cosmos cosmos = new Cosmos(store,1200, 800);
+        Cosmos cosmos = new Cosmos(store);
         cosmos.setAnimator(animator);
         animator.start();
     }
@@ -70,6 +78,11 @@ public class App extends Application {
         saveLoadService.saveIfStartupWithLast();
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         launch();
     }

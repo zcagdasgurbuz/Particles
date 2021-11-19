@@ -15,7 +15,7 @@ import javafx.stage.StageStyle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Utility class for circles fractal
+ * Utility for ui
  */
 public class UiUtil {
 
@@ -47,12 +47,10 @@ public class UiUtil {
         dialogPane.getStylesheets().add(
                 getClass().getResource("/styles.css").toExternalForm());
         //make dialog movable, found this way of doing online somewhere, very clever.
-        dialogPane.setOnMousePressed(pressEvent -> {
-            dialogPane.setOnMouseDragged(dragEvent -> {
-                alert.setX(dragEvent.getScreenX() - pressEvent.getSceneX());
-                alert.setY(dragEvent.getScreenY() - pressEvent.getSceneY());
-            });
-        });
+        dialogPane.setOnMousePressed(pressEvent -> dialogPane.setOnMouseDragged(dragEvent -> {
+            alert.setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+            alert.setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+        }));
 
         alert.showAndWait()
                 .filter(response -> response == ButtonType.YES)

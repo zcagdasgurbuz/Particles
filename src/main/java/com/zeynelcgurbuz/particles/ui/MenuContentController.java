@@ -27,67 +27,205 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+/**
+ * The type Menu content controller.
+ */
 public class MenuContentController implements Subscriber<ParticlesState> {
 
+    /**
+     * The Config name field.
+     */
     public TextField configNameField;
+    /**
+     * The Config names list view.
+     */
     public ListView<ParticlesState> configNamesListView;
+    /**
+     * The Save button.
+     */
     public Button saveButton;
+    /**
+     * The Load button.
+     */
     public Button loadButton;
+    /**
+     * The Remove button.
+     */
     public Button removeButton;
-    //
+    /**
+     * The Attraction standard.
+     */
+//
     public CheckBox attractionStandard;
+    /**
+     * The Negate self attr.
+     */
     public CheckBox negateSelfAttr;
+    /**
+     * The Min r standard.
+     */
     public CheckBox minRStandard;
+    /**
+     * The Max r standard.
+     */
     public CheckBox maxRStandard;
+    /**
+     * The Gravitational attr.
+     */
     public CheckBox gravitationalAttr;
+    /**
+     * The Molecular attr.
+     */
     public CheckBox molecularAttr;
+    /**
+     * The Is walls active.
+     */
     public CheckBox isWallsActive;
-    //
+    /**
+     * The In range style.
+     */
+//
     public ComboBox<String> inRangeStyle;
+    /**
+     * The Below range style.
+     */
     public ComboBox<String> belowRangeStyle;
+    /**
+     * The Out range style.
+     */
     public ComboBox<String> outRangeStyle;
-    //
+    /**
+     * The Particles count spinner.
+     */
+//
     public Spinner<Integer> particlesCountSpinner;
+    /**
+     * The Particle types spinner.
+     */
     public Spinner<Integer> particleTypesSpinner;
+    /**
+     * The Flat radius spinner.
+     */
     public Spinner<Double> flatRadiusSpinner;
+    /**
+     * The G spinner.
+     */
     public Spinner<Double> gSpinner;
+    /**
+     * The Friction spinner.
+     */
     public Spinner<Double> frictionSpinner;
+    /**
+     * The Attr mean.
+     */
     public Spinner<Double> attrMean;
+    /**
+     * The Attr std.
+     */
     public Spinner<Double> attrStd;
+    /**
+     * The Attr min.
+     */
     public Spinner<Double> attrMin;
+    /**
+     * The Attr max.
+     */
     public Spinner<Double> attrMax;
+    /**
+     * The Min r mean.
+     */
     public Spinner<Double> minRMean;
+    /**
+     * The Min r std.
+     */
     public Spinner<Double> minRStd;
+    /**
+     * The Min r min.
+     */
     public Spinner<Double> minRMin;
+    /**
+     * The Min r max.
+     */
     public Spinner<Double> minRMax;
+    /**
+     * The Max r mean.
+     */
     public Spinner<Double> maxRMean;
+    /**
+     * The Max r std.
+     */
     public Spinner<Double> maxRStd;
+    /**
+     * The Max r min.
+     */
     public Spinner<Double> maxRMin;
+    /**
+     * The Max r max.
+     */
     public Spinner<Double> maxRMax;
+    /**
+     * The Restart button.
+     */
     public Button restartButton;
+    /**
+     * The Restart required alert.
+     */
     public Label restartRequiredAlert;
 
+    /**
+     * The Startup last state.
+     */
     public CheckBox startupLastState;
 
+    /**
+     * The Store subscription.
+     */
     private Subscription storeSubscription = null;
 
+    /**
+     * The Store.
+     */
     private Store<ParticlesState> store;
+    /**
+     * The State.
+     */
     private ParticlesState state;
+    /**
+     * The Converter.
+     */
     private StringConverter<Double> converter = null;
+    /**
+     * The Need recalculation.
+     */
     @FXML
     public BooleanProperty needRecalculation;
+    /**
+     * The Funcs.
+     */
     ObservableList<String> funcs = null;
+    /**
+     * The Save load service.
+     */
     private SaveLoadService saveLoadService;
 
+    /**
+     * Instantiates a new Menu content controller.
+     */
     MenuContentController() {
     }
 
+    /**
+     * Instantiates a new Menu content controller.
+     *
+     * @param store           the store
+     * @param saveLoadService the save load service
+     */
     public MenuContentController(Store<ParticlesState> store, SaveLoadService saveLoadService) {
         //super();
         this.store = store;
         this.saveLoadService = saveLoadService;
         needRecalculation = new SimpleBooleanProperty(false);
-        converter = new StringConverter<Double>() {
+        converter = new StringConverter<>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
 
             @Override
@@ -145,6 +283,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         funcs = FXCollections.observableArrayList(funcsArray);
     }
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
         storeSubscription = store.subscribe(this);
@@ -171,7 +312,8 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         outRangeStyle.setItems(funcs);
         setValues();
         setListeners();
-        configNameField.textProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(newValue.length() <= 0));
+        configNameField.textProperty().addListener((observable, oldValue, newValue) ->
+                saveButton.setDisable(newValue.length() <= 0));
         configNamesListView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() >= 0) {
                 loadButton.setDisable(false);
@@ -183,6 +325,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         });
     }
 
+    /**
+     * Sets values.
+     */
     private void setValues() {
         attractionStandard.setSelected(state.isAttractionStandard());
         negateSelfAttr.setSelected(state.isNegateSelfAttraction());
@@ -217,6 +362,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         startupLastState.setSelected(saveLoadService.isSaveOnClose());
     }
 
+    /**
+     * Sets listeners.
+     */
     private void setListeners() {
 
         attractionStandard.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -327,27 +475,44 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             state.setFriction(newValue);
             requestSetState();
         });
-        startupLastState.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            saveLoadService.setSaveOnClose(newValue);
-        });
+        startupLastState.selectedProperty().addListener((observable, oldValue, newValue) ->
+                saveLoadService.setSaveOnClose(newValue));
     }
 
-    //save load state...
+    /**
+     * Save button action.
+     *
+     * @param actionEvent the action event
+     */
+//save load state...
     public void saveButtonAction(ActionEvent actionEvent) {
         String name = configNameField.textProperty().get();
         if (saveLoadService.requestSave(name))
             configNameField.textProperty().set("");
     }
 
+    /**
+     * Load button action.
+     *
+     * @param actionEvent the action event
+     */
     public void loadButtonAction(ActionEvent actionEvent) {
         saveLoadService.requestLoad(configNamesListView.getSelectionModel().getSelectedItem());
         needRecalculation.set(false);
     }
 
+    /**
+     * Remove button action.
+     *
+     * @param actionEvent the action event
+     */
     public void removeButtonAction(ActionEvent actionEvent) {
         saveLoadService.requestRemove(configNamesListView.getSelectionModel().getSelectedItem());
     }
 
+    /**
+     * Request set state.
+     */
     private void requestSetState() {
         store.dispatch(new SetStateAction(state));
     }
@@ -358,6 +523,11 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         setValues();
     }
 
+    /**
+     * Restart button.
+     *
+     * @param actionEvent the action event
+     */
     public void restartButton(ActionEvent actionEvent) {
         requestSetState();
         store.dispatch(new RestartAction());
