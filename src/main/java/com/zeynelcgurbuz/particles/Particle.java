@@ -94,7 +94,7 @@ public class Particle {
      * @return the position
      */
     public Vector getPosition() {
-        return position;
+        return new Vector(position);
     }
 
     /**

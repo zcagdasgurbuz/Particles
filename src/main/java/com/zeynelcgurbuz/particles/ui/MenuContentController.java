@@ -225,19 +225,17 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         this.store = store;
         this.saveLoadService = saveLoadService;
         needRecalculation = new SimpleBooleanProperty(false);
+        //decimal format of spinners, taken from api
         converter = new StringConverter<>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
-
             @Override
             public String toString(Double value) {
                 // If the specified value is null, return a zero-length String
                 if (value == null) {
                     return "";
                 }
-
                 return df.format(value);
             }
-
             @Override
             public Double fromString(String value) {
                 try {
@@ -245,13 +243,10 @@ public class MenuContentController implements Subscriber<ParticlesState> {
                     if (value == null) {
                         return null;
                     }
-
                     value = value.trim();
-
                     if (value.length() < 1) {
                         return null;
                     }
-
                     // Perform the requested parsing
                     return df.parse(value).doubleValue();
                 } catch (ParseException ex) {
@@ -280,6 +275,10 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         funcsArray.add("attr2 / r^2");
         funcsArray.add("-attr1 / r^2");
         funcsArray.add("-attr2 / r^2");
+        funcsArray.add("attr1 * (1 - (pt 2 effective) r)");
+        funcsArray.add("attr2 * (1 - (pt 1 effective) r)");
+        funcsArray.add("minR1 * (1/minR1 - 1/r)");
+        funcsArray.add("minR2 * (1/minR2 - 1/r)");
         funcs = FXCollections.observableArrayList(funcsArray);
     }
 
@@ -358,7 +357,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         maxRStd.getValueFactory().setValue(state.getMaxRStd());
         maxRMin.getValueFactory().setValue(state.getMaxRLower());
         maxRMax.getValueFactory().setValue(state.getMaxRUpper());
-        configNamesListView.setItems(saveLoadService.getStates());
+        configNamesListView.setItems(saveLoadService.getStates().sorted());
         startupLastState.setSelected(saveLoadService.isSaveOnClose());
     }
 

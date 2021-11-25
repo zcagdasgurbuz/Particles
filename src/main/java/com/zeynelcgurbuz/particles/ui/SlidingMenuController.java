@@ -44,6 +44,8 @@ public class SlidingMenuController {
      */
     @FXML
     public void initialize() {
+        menuButton.setId("slidingMenuButton");
+
         //to see the menu moving
         slidingMenu.setBorder(new Border(new BorderStroke(Color.WHITE,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
