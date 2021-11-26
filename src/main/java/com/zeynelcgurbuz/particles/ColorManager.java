@@ -9,11 +9,11 @@ import java.util.ArrayList;
  */
 public class ColorManager {
     /**
-     * The constant colors.
+     * The colors.
      */
     private static final ArrayList<Color> colors = new ArrayList<>();
     /**
-     * The constant currentIdx.
+     * The last color id
      */
     private static int currentIdx = 0;
 
@@ -49,5 +49,4 @@ public class ColorManager {
         currentIdx %= colors.size();
         return colors.get(currentIdx++);
     }
-
 }

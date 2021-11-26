@@ -10,4 +10,6 @@ module com.zeynelcgurbuz.particles {
     exports com.zeynelcgurbuz.particles.ui;
     opens com.zeynelcgurbuz.particles.ui to javafx.fxml;
     exports com.zeynelcgurbuz.particles.store.actions;
+    exports com.zeynelcgurbuz.particles.calculator;
+    opens com.zeynelcgurbuz.particles.calculator to javafx.fxml;
 }
