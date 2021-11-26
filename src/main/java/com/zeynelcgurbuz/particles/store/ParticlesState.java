@@ -12,6 +12,10 @@ import java.io.Serializable;
 public class ParticlesState implements Serializable {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 2L;
+    /**
      * The width of the visible area.
      */
     private double width;
@@ -145,6 +149,11 @@ public class ParticlesState implements Serializable {
     private boolean wallsActive;
 
     /**
+     * Whether the elastic collisions is active
+     */
+    private boolean elasticCollision;
+
+    /**
      * The particles' info that stores the type info.
      */
     private ParticlesInfo info;
@@ -206,14 +215,15 @@ public class ParticlesState implements Serializable {
      * @param molAttract           Whether the molecular attraction is active
      * @param gravAttract          Whether the gravitational attraction is active
      * @param wallsActive          Whether the walls are active
-     * @param info                 The particles' info that stores the type info.
+     * @param elasticCollision     Whether the elastic collisions is active
+     * @param info                 the info
      */
     public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
                           double flatRadius, int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
                           double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
                           double maxRMean, double maxRStd, boolean maxRStandard, double attractionMin, double attractionMax,
                           double attractionMean, double attractionStd, boolean attractionStandard, boolean negateSelfAttraction,
-                          double friction, double g, boolean molAttract, boolean gravAttract, boolean wallsActive,
+                          double friction, double g, boolean molAttract, boolean gravAttract, boolean wallsActive, boolean elasticCollision,
                           ParticlesInfo info) {
         this.width = width;
         this.height = height;
@@ -246,6 +256,7 @@ public class ParticlesState implements Serializable {
         this.molAttract = molAttract;
         this.gravAttract = gravAttract;
         this.wallsActive = wallsActive;
+        this.elasticCollision = elasticCollision;
         this.info = info;
     }
 
@@ -259,7 +270,7 @@ public class ParticlesState implements Serializable {
                 particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
-                g, molAttract, gravAttract, wallsActive, info == null ? null : new ParticlesInfo(info));
+                g, molAttract, gravAttract, wallsActive, elasticCollision, info == null ? null : new ParticlesInfo(info));
         copy.setGraphics(graphics);
         copy.setName(name);
         return copy;
@@ -275,7 +286,7 @@ public class ParticlesState implements Serializable {
                 particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
-                g, molAttract, gravAttract, wallsActive, info);
+                g, molAttract, gravAttract, wallsActive, elasticCollision, info);
         copy.setGraphics(graphics);
         copy.setName(name);
         return copy;
@@ -893,6 +904,26 @@ public class ParticlesState implements Serializable {
     }
 
     /**
+     * Is elastic collision active boolean.
+     *
+     * @return whether the elastic collision active
+     */
+    public boolean isElasticCollision() {
+        return elasticCollision;
+    }
+
+    /**
+     * Sets elastic collision.
+     *
+     * @param elasticCollision the walls active
+     * @return the elastic collision active
+     */
+    public ParticlesState setElasticCollision(boolean elasticCollision) {
+        this.elasticCollision = elasticCollision;
+        return this;
+    }
+
+    /**
      * Gets info.
      *
      * @return the info
@@ -949,7 +980,6 @@ public class ParticlesState implements Serializable {
         this.restartRequested = restartRequested;
         return this;
     }
-
 
     /**
      * Sets name.

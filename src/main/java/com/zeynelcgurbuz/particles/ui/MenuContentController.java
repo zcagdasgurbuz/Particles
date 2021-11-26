@@ -56,7 +56,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     /**
      * The Attraction standard.
      */
-//
     public CheckBox attractionStandard;
     /**
      * The Negate self attr.
@@ -82,6 +81,10 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      * The Is walls active.
      */
     public CheckBox isWallsActive;
+    /**
+     * The Elastic collision.
+     */
+    public CheckBox elasticCollision;
     /**
      * The In range style.
      */
@@ -176,6 +179,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      */
     public CheckBox startupLastState;
 
+
     /**
      * The Store subscription.
      */
@@ -227,6 +231,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         //decimal format of spinners, taken from api
         converter = new StringConverter<>() {
             private final DecimalFormat df = new DecimalFormat("#.#####");
+
             @Override
             public String toString(Double value) {
                 // If the specified value is null, return a zero-length String
@@ -235,6 +240,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
                 }
                 return df.format(value);
             }
+
             @Override
             public Double fromString(String value) {
                 try {
@@ -334,6 +340,7 @@ public class MenuContentController implements Subscriber<ParticlesState> {
         gravitationalAttr.setSelected(state.isGravAttract());
         molecularAttr.setSelected(state.isMolAttract());
         isWallsActive.setSelected(state.isWallsActive());
+        elasticCollision.setSelected(state.isElasticCollision());
         //combooooox
         inRangeStyle.getSelectionModel().select(state.getInRangeStyle());
         belowRangeStyle.getSelectionModel().select(state.getBelowRangeStyle());
@@ -462,10 +469,14 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             requestSetState();
         });
         isWallsActive.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue){
+            if (!newValue) {
                 state.setMouseDragPosition(new Vector());
             }
             state.setWallsActive(newValue);
+            requestSetState();
+        });
+        elasticCollision.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            state.setElasticCollision(newValue);
             requestSetState();
         });
         gSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {

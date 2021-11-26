@@ -9,6 +9,10 @@ import java.util.Arrays;
 public class ParticlesInfo implements Serializable {
 
     /**
+     * Serialization version
+     */
+    private static final long serialVersionUID = 2L;
+    /**
      * The colors of the types.
      */
     private String[] colors;

@@ -7,6 +7,7 @@ import com.zeynelcgurbuz.particles.calculator.MolecularAttractionCalculator;
 import com.zeynelcgurbuz.particles.calculator.ParticleCollisionCalculator;
 import com.zeynelcgurbuz.particles.calculator.PositionCalculator;
 import com.zeynelcgurbuz.particles.calculator.RecursiveCalculator;
+import com.zeynelcgurbuz.particles.calculator.SimpleCollisionCalculator;
 import com.zeynelcgurbuz.particles.calculator.WallCollisionCalculator;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
@@ -74,6 +75,10 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
      * The particle collision calculator.
      */
     private final ParticleCollisionCalculator particleCollisionCalculator;
+    /**
+     * The particle collision calculator.
+     */
+    private final SimpleCollisionCalculator simpleCollisionCalculator;
 
 
     /**
@@ -98,6 +103,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         gravitationalAttractionCalculator = new GravitationalAttractionCalculator();
         wallCollisionCalculator = new WallCollisionCalculator();
         particleCollisionCalculator = new ParticleCollisionCalculator();
+        simpleCollisionCalculator = new SimpleCollisionCalculator();
     }
 
     /**
@@ -131,6 +137,8 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 particles.size(), REC_LIMIT, wallCollisionCalculator, particles, state);
         RecursiveCalculator particlesCollisionCalc = new RecursiveCalculator(0,
                 particles.size(), REC_LIMIT, particleCollisionCalculator, particles, state);
+        RecursiveCalculator simpleCollisionCalc = new RecursiveCalculator(0,
+                particles.size(), REC_LIMIT, simpleCollisionCalculator, particles, state);
 
         PositionCalculator positionCalculator = new PositionCalculator(particles, state);
 
@@ -142,8 +150,10 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         if (state.isWallsActive())
             forkJoinPool.invoke(wallCollisionCalc);
         forkJoinPool.submit(positionCalculator);
-        forkJoinPool.invoke(particlesCollisionCalc);
-
+        if(state.isElasticCollision())
+            forkJoinPool.invoke(particlesCollisionCalc);
+        else
+            forkJoinPool.invoke(simpleCollisionCalc);
         drawCosmos();
     }
 

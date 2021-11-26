@@ -35,7 +35,7 @@ public enum SaveLoadService {
             9, 4, 4, 5, 0, 10, 30, 20.0,
             5.0, false, 30, 100, 75.0, 15.0, false,
             -10.0, 10.0, 0.5, 5.0, true,
-            true, 0.2, 0.01, true, false, true, null);
+            true, 0.2, 0.01, true, false, true, true, null);
 
     /**
      * The Dummy.
@@ -44,7 +44,7 @@ public enum SaveLoadService {
             0, 1, 0, 0, 0, 0, 0, 0, 0,
             false, 0, 0, 0, 0, false, 0,
             0, 0, 0, false, false, 0, 0,
-            false, false, false, null);
+            false, false, false, false, null);
 
 
     /**

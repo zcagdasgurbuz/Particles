@@ -34,11 +34,13 @@
                                     <Label text="Gravitational Attraction"/>
                                     <Label text="Moleculer Attraction"/>
                                     <Label text="Enclosed with walls"/>
+                                    <Label text="Elastic collision"/>
                                 </VBox>
                                 <VBox spacing="5">
                                     <CheckBox fx:id="gravitationalAttr"/>
                                     <CheckBox fx:id="molecularAttr"/>
                                     <CheckBox fx:id="isWallsActive"/>
+                                    <CheckBox fx:id="elasticCollision"/>
                                 </VBox>
                             </HBox>
                             <HBox spacing="10">
