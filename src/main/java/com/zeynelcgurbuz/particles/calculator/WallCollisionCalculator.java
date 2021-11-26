@@ -36,8 +36,10 @@ public class WallCollisionCalculator implements Calculator{
         if(forceField.x != 0 && forceField.y != 0){
             if (positionVector1.x > (forceField.x - 30) && positionVector1.x < (forceField.x + 30) &&
                     positionVector1.y > (forceField.y - 30) && positionVector1.y < (forceField.y + 30)) {
-                positionVector1.x = forceField.x;
-                positionVector1.y = forceField.y;
+                //positionVector1.x = forceField.x;
+                //positionVector1.y = forceField.y;
+                velocityVector1.x = -velocityVector1.x;
+                velocityVector1.y = -velocityVector1.y;
             }
 
         }
