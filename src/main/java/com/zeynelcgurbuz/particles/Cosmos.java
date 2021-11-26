@@ -198,7 +198,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         } else {
             if(forceField.x != 0 && forceField.y != 0){
                 graphics.setStroke(Color.WHITE);
-                graphics.strokeOval(forceField.x - 20, forceField.y - 20, 40,40);
+                graphics.strokeOval(forceField.x - 30, forceField.y - 30, 60,60);
             }
         }
 

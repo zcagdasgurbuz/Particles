@@ -14,6 +14,7 @@ public class WallCollisionCalculator implements Calculator{
     public void calculate(int index, ArrayList<Particle> particles, ParticlesState state) {
         Particle particle = particles.get(index);
         double radius = particle.getRadius();
+        Vector forceField = state.getForceFieldPosition();
         Vector positionVector1 = particle.getPosition();
         Vector velocityVector1 = particle.getVelocity();
         if (positionVector1.x < radius) {
@@ -31,6 +32,14 @@ public class WallCollisionCalculator implements Calculator{
         if (positionVector1.y > state.getHeight() - radius) {
             positionVector1.y = state.getHeight() - radius;
             velocityVector1.y = -velocityVector1.y;
+        }
+        if(forceField.x != 0 && forceField.y != 0){
+            if (positionVector1.x > (forceField.x - 30) && positionVector1.x < (forceField.x + 30) &&
+                    positionVector1.y > (forceField.y - 30) && positionVector1.y < (forceField.y + 30)) {
+                positionVector1.x = forceField.x;
+                positionVector1.y = forceField.y;
+            }
+
         }
         particle.setPosition(positionVector1);
         particle.setVelocity(velocityVector1);
