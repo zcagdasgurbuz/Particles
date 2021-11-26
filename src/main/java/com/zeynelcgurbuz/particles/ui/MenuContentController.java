@@ -1,5 +1,6 @@
 package com.zeynelcgurbuz.particles.ui;
 
+import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.redux.Subscriber;
 import com.zeynelcgurbuz.particles.redux.Subscription;
@@ -84,7 +85,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     /**
      * The In range style.
      */
-//
     public ComboBox<String> inRangeStyle;
     /**
      * The Below range style.
@@ -97,7 +97,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     /**
      * The Particles count spinner.
      */
-//
     public Spinner<Integer> particlesCountSpinner;
     /**
      * The Particle types spinner.
@@ -463,6 +462,9 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             requestSetState();
         });
         isWallsActive.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue){
+                state.setMouseDragPosition(new Vector());
+            }
             state.setWallsActive(newValue);
             requestSetState();
         });
