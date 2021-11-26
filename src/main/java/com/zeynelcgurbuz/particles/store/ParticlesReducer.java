@@ -2,13 +2,12 @@ package com.zeynelcgurbuz.particles.store;
 
 import com.zeynelcgurbuz.particles.ColorManager;
 import com.zeynelcgurbuz.particles.ParticlesInfo;
-import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Action;
 import com.zeynelcgurbuz.particles.redux.Reducer;
 import com.zeynelcgurbuz.particles.store.actions.BoundariesChangedAction;
+import com.zeynelcgurbuz.particles.store.actions.ForceFieldAction;
 import com.zeynelcgurbuz.particles.store.actions.GenerateRandomParticlesInfoAction;
 import com.zeynelcgurbuz.particles.store.actions.MouseDragAction;
-import com.zeynelcgurbuz.particles.store.actions.MouseDragStopAction;
 import com.zeynelcgurbuz.particles.store.actions.RestartAction;
 import com.zeynelcgurbuz.particles.store.actions.RestartFulfilledAction;
 import com.zeynelcgurbuz.particles.store.actions.SetGraphicsContextAction;
@@ -37,8 +36,9 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
         } else if (action instanceof MouseDragAction) {
             MouseDragAction mouseDragAction = (MouseDragAction) action;
             return oldState.shallowCopy().setMouseDragPosition(mouseDragAction.getValue());
-        } else if (action instanceof MouseDragStopAction) {
-            return oldState.shallowCopy().setMouseDragPosition(new Vector());
+        } else if (action instanceof ForceFieldAction) {
+            ForceFieldAction forceFieldAction = (ForceFieldAction) action;
+            return oldState.shallowCopy().setForceFieldPosition(forceFieldAction.getValue());
         } else if (action instanceof BoundariesChangedAction) {
             return oldState.shallowCopy().setWidth(((BoundariesChangedAction) action).getWidth())
                     .setHeight(((BoundariesChangedAction) action).getHeight());
@@ -64,15 +64,15 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
             for (int j = 0; j < state.getInfo().size(); j++) {
                 //set attractions
                 if (state.isAttractionStandard()) {
-                    state.getInfo().setAttraction(i, j,  state.isNegateSelfAttraction() && i == j ?
-                                    -Math.abs(state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())) :
-                                    (state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())));
+                    state.getInfo().setAttraction(i, j, state.isNegateSelfAttraction() && i == j ?
+                            -Math.abs(state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())) :
+                            (state.getAttractionMean() + (state.getAttractionStd() * random.nextGaussian())));
                 } else {
                     state.getInfo().setAttraction(i, j, state.isNegateSelfAttraction() && i == j ?
                             -Math.abs(state.getAttractionMin() + (state.getAttractionMax() - state.getAttractionMin()) *
                                     random.nextDouble()) :
                             (state.getAttractionMin() + (state.getAttractionMax() - state.getAttractionMin()) *
-                            random.nextDouble()));
+                                    random.nextDouble()));
                 }
                 //set maxRs
                 if (state.isMaxRStandard()) {

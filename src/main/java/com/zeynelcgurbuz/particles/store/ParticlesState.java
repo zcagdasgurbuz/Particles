@@ -29,7 +29,7 @@ public class ParticlesState implements Serializable {
      */
     private Vector mouseDragPosition;
     /**
-     * The Force field position, *not utilized yet*
+     * The Force field position
      */
     private Vector forceFieldPosition;
 
@@ -320,6 +320,26 @@ public class ParticlesState implements Serializable {
      */
     public ParticlesState setMouseDragPosition(Vector mouseDragPosition) {
         this.mouseDragPosition = mouseDragPosition;
+        return this;
+    }
+
+    /**
+     * Gets force field position.
+     *
+     * @return the force field position.
+     */
+    public Vector getForceFieldPosition() {
+        return forceFieldPosition;
+    }
+
+    /**
+     * Sets force field position.
+     *
+     * @param forceFieldPosition the force field position.
+     * @return the force field position.
+     */
+    public ParticlesState setForceFieldPosition(Vector forceFieldPosition) {
+        this.forceFieldPosition = forceFieldPosition;
         return this;
     }
 

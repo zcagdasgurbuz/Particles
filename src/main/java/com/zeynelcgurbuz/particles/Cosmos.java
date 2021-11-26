@@ -182,18 +182,29 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
         }
     }
 
-
-
     /**
      * Draws all the particles using graphics context in the state.
      */
     private void drawCosmos() {
         GraphicsContext graphics = state.getGraphics();
         Vector initialPosition = new Vector();
-        if (!state.isWallsActive()) initialPosition = store.getState().getMouseDragPosition();
+        Vector forceField = state.getForceFieldPosition();
         //clear previous frame
         graphics.clearRect(0, 0,
                 graphics.getCanvas().getWidth(), graphics.getCanvas().getHeight());
+
+        if (!state.isWallsActive()){
+            initialPosition = store.getState().getMouseDragPosition();
+        } else {
+            if(forceField.x != 0 && forceField.y != 0){
+                graphics.setStroke(Color.WHITE);
+                graphics.strokeOval(forceField.x - 20, forceField.y - 20, 40,40);
+            }
+        }
+
+
+
+
         //draw all particles
         for (Particle particle : particles) {
             graphics.setFill(particle.getColor());

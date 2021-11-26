@@ -4,6 +4,7 @@ import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.redux.Store;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 import com.zeynelcgurbuz.particles.store.actions.BoundariesChangedAction;
+import com.zeynelcgurbuz.particles.store.actions.ForceFieldAction;
 import com.zeynelcgurbuz.particles.store.actions.MouseDragAction;
 import com.zeynelcgurbuz.particles.store.actions.SetGraphicsContextAction;
 import javafx.fxml.FXML;
@@ -73,20 +74,26 @@ public class DisplayController {
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             captured[0] = event.getX();
             captured[1] = event.getY();
-
         });
         canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            Vector currentPos = store.getState().getMouseDragPosition();
-            double x = event.getX() - captured[0];
-            double y = event.getY() - captured[1];
-            captured[0] = event.getX();
-            captured[1] = event.getY();
-            store.dispatch(new MouseDragAction(currentPos.add(new Vector(x, y))));
+            if(store.getState().isWallsActive()){
+                store.dispatch(new ForceFieldAction(new Vector(event.getX(), event.getY())));
+            } else {
+                Vector currentPos = store.getState().getMouseDragPosition();
+                double x = event.getX() - captured[0];
+                double y = event.getY() - captured[1];
+                captured[0] = event.getX();
+                captured[1] = event.getY();
+                store.dispatch(new MouseDragAction(currentPos.add(new Vector(x, y))));
+            }
         });
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 store.dispatch(new MouseDragAction(new Vector()));
             }
+        });
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseEvent -> {
+            store.dispatch(new ForceFieldAction(new Vector()));
         });
     }
 }
