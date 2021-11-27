@@ -9,8 +9,13 @@ import java.util.ArrayList;
 /**
  * Wall collision calculator.
  */
-public class WallCollisionCalculator implements Calculator{
-    private Vector previousforceField = new Vector();
+public class WallCollisionCalculator implements Calculator {
+
+    /**
+     * The previous force field.
+     */
+    private Vector previousForceField = new Vector();
+
     @Override
     public void calculate(int index, ArrayList<Particle> particles, ParticlesState state) {
         Particle particle = particles.get(index);
@@ -34,12 +39,12 @@ public class WallCollisionCalculator implements Calculator{
             positionVector1.y = state.getHeight() - radius;
             velocityVector1.y = -velocityVector1.y;
         }
-        if(forceField.x != 0 && forceField.y != 0){
+        if (forceField.x != 0 && forceField.y != 0) {
             double x = 0.0;
             double y = 0.0;
-            if(previousforceField.x != 0 && previousforceField.y != 0){
-                x = forceField.x - previousforceField.x;
-                y = forceField.y - previousforceField.y;
+            if (previousForceField.x != 0 && previousForceField.y != 0) {
+                x = forceField.x - previousForceField.x;
+                y = forceField.y - previousForceField.y;
             }
             if (positionVector1.x > (forceField.x - 30) && positionVector1.x < (forceField.x + 30) &&
                     positionVector1.y > (forceField.y - 30) && positionVector1.y < (forceField.y + 30)) {
@@ -50,10 +55,10 @@ public class WallCollisionCalculator implements Calculator{
                 //velocityVector1.x = -velocityVector1.x;
                 //velocityVector1.y = -velocityVector1.y;
             }
-            if(index == particles.size() - 1)
-                previousforceField = new Vector(forceField);
+            if (index == particles.size() - 1)
+                previousForceField = new Vector(forceField);
         } else {
-            previousforceField = new Vector();
+            previousForceField = new Vector();
         }
         particle.setPosition(positionVector1);
         particle.setVelocity(velocityVector1);
