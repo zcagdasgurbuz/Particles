@@ -58,9 +58,15 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      */
     public CheckBox attractionStandard;
     /**
-     * The Negate self attr.
+     * The negate self attr.
      */
     public CheckBox negateSelfAttr;
+
+    /**
+     * The Reciprocal attraction.
+     */
+    public CheckBox reciprocalAttraction;
+
     /**
      * The Min r standard.
      */
@@ -165,6 +171,12 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      * The Max r max.
      */
     public Spinner<Double> maxRMax;
+
+    /**
+     * The Reciprocal r.
+     */
+    public CheckBox reciprocalR;
+
     /**
      * The Restart button.
      */
@@ -178,7 +190,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      * The Startup last state.
      */
     public CheckBox startupLastState;
-
 
     /**
      * The Store subscription.
@@ -335,8 +346,10 @@ public class MenuContentController implements Subscriber<ParticlesState> {
     private void setValues() {
         attractionStandard.setSelected(state.isAttractionStandard());
         negateSelfAttr.setSelected(state.isNegateSelfAttraction());
+        reciprocalAttraction.setSelected(state.isReciprocalAttraction());
         minRStandard.setSelected(state.isMinRStandard());
         maxRStandard.setSelected(state.isMaxRStandard());
+        reciprocalR.setSelected(state.isReciprocalR());
         gravitationalAttr.setSelected(state.isGravAttract());
         molecularAttr.setSelected(state.isMolAttract());
         isWallsActive.setSelected(state.isWallsActive());
@@ -380,12 +393,20 @@ public class MenuContentController implements Subscriber<ParticlesState> {
             state.setNegateSelfAttraction(newValue);
             needRecalculation.set(true);
         });
+        reciprocalAttraction.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            state.setReciprocalAttraction(newValue);
+            needRecalculation.set(true);
+        });
         minRStandard.selectedProperty().addListener((observable, oldValue, newValue) -> {
             state.setMinRStandard(newValue);
             needRecalculation.set(true);
         });
         maxRStandard.selectedProperty().addListener((observable, oldValue, newValue) -> {
             state.setMaxRStandard(newValue);
+            needRecalculation.set(true);
+        });
+        reciprocalR.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            state.setReciprocalR(newValue);
             needRecalculation.set(true);
         });
         particlesCountSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {

@@ -151,6 +151,10 @@
                                         <Label text="Negate self attraction" prefWidth="200"/>
                                         <CheckBox fx:id="negateSelfAttr"/>
                                     </HBox>
+                                    <HBox spacing="10">
+                                        <Label text="Reciprocal attraction" prefWidth="200"/>
+                                        <CheckBox fx:id="reciprocalAttraction"/>
+                                    </HBox>
                                 </VBox>
                                 <Separator prefWidth="250"/>
                                 <VBox spacing="5">
@@ -239,6 +243,11 @@
                                     </HBox>
                                 </VBox>
                             </VBox>
+                            <HBox spacing="10">
+                                <Label text="Reciprocal R" prefWidth="200"/>
+                                <CheckBox fx:id="reciprocalR"/>
+                            </HBox>
+                            <Separator prefWidth="250"/>
                             <HBox spacing="10">
                                 <Button text="Restart" fx:id="restartButton" onAction="#restartButton"/>
                                 <Label text="RESTART REQUIRED" fx:id="restartRequiredAlert"/>

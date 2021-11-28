@@ -106,6 +106,11 @@ public class ParticlesState implements Serializable {
     private boolean negateSelfAttraction;
 
     /**
+     * Whether the attraction is reciprocal between types.
+     */
+    private boolean reciprocalAttraction;
+
+    /**
      * The minimum of maximum attraction range, is used to generate random maximum range value
      */
     private double maxRLower;
@@ -125,6 +130,11 @@ public class ParticlesState implements Serializable {
      * Whether the random maximum attraction range is calculated based on standard distribution
      */
     private boolean maxRStandard;
+
+    /**
+     * Whether the distances are reciprocal between types.
+     */
+    private boolean reciprocalR;
 
     /**
      * The friction value
@@ -204,12 +214,14 @@ public class ParticlesState implements Serializable {
      * @param maxRMean             The mean of maximum attraction range, is used to generate random maximum range value
      * @param maxRStd              The standard dev. of maximum attraction range, is used to generate random maximum range value
      * @param maxRStandard         Whether the random maximum attraction range is calculated based on standard distribution
+     * @param reciprocalR          Whether the distances are reciprocal between types.
      * @param attractionMin        The minimum of the attraction value, is used to generate random attraction value.
      * @param attractionMax        The maximum of the attraction value, is used to generate random attraction value.
      * @param attractionMean       The mean of the attraction value, is used to generate random attraction value.
      * @param attractionStd        The standard dev of the attraction value, is used to generate random attraction value.
      * @param attractionStandard   Whether the random attraction value is calculated based on standard distribution.
      * @param negateSelfAttraction Whether the self attraction is always negative.
+     * @param reciprocalAttraction Whether the attraction is reciprocal between types.
      * @param friction             The friction value
      * @param g                    The g factor, is used to scale gravity
      * @param molAttract           Whether the molecular attraction is active
@@ -221,9 +233,10 @@ public class ParticlesState implements Serializable {
     public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
                           double flatRadius, int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
                           double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
-                          double maxRMean, double maxRStd, boolean maxRStandard, double attractionMin, double attractionMax,
-                          double attractionMean, double attractionStd, boolean attractionStandard, boolean negateSelfAttraction,
-                          double friction, double g, boolean molAttract, boolean gravAttract, boolean wallsActive, boolean elasticCollision,
+                          double maxRMean, double maxRStd, boolean maxRStandard, boolean reciprocalR, double attractionMin,
+                          double attractionMax,  double attractionMean, double attractionStd, boolean attractionStandard,
+                          boolean negateSelfAttraction,  boolean reciprocalAttraction, double friction, double g,
+                          boolean molAttract, boolean gravAttract, boolean wallsActive, boolean elasticCollision,
                           ParticlesInfo info) {
         this.width = width;
         this.height = height;
@@ -245,12 +258,14 @@ public class ParticlesState implements Serializable {
         this.maxRMean = maxRMean;
         this.maxRStd = maxRStd;
         this.maxRStandard = maxRStandard;
+        this.reciprocalR = reciprocalR;
         this.attractionMin = attractionMin;
         this.attractionMax = attractionMax;
         this.attractionMean = attractionMean;
         this.attractionStd = attractionStd;
         this.attractionStandard = attractionStandard;
         this.negateSelfAttraction = negateSelfAttraction;
+        this.reciprocalAttraction = reciprocalAttraction;
         this.friction = friction;
         this.g = g;
         this.molAttract = molAttract;
@@ -268,9 +283,10 @@ public class ParticlesState implements Serializable {
     public ParticlesState copy() {
         ParticlesState copy = new ParticlesState(width, height, new Vector(mouseDragPosition), new Vector(forceFieldPosition),
                 particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
-                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
-                attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
-                g, molAttract, gravAttract, wallsActive, elasticCollision, info == null ? null : new ParticlesInfo(info));
+                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, reciprocalR,
+                attractionMin, attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction,
+                reciprocalAttraction, friction, g, molAttract, gravAttract, wallsActive, elasticCollision,
+                info == null ? null : new ParticlesInfo(info));
         copy.setGraphics(graphics);
         copy.setName(name);
         return copy;
@@ -284,8 +300,8 @@ public class ParticlesState implements Serializable {
     public ParticlesState shallowCopy() {
         ParticlesState copy = new ParticlesState(width, height, mouseDragPosition, forceFieldPosition,
                 particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
-                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, attractionMin,
-                attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, friction,
+                minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, reciprocalR, attractionMin,
+                attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, reciprocalAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, elasticCollision, info);
         copy.setGraphics(graphics);
         copy.setName(name);
@@ -1009,6 +1025,44 @@ public class ParticlesState implements Serializable {
      */
     public ParticlesState setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Is reciprocal attraction boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isReciprocalAttraction() {
+        return reciprocalAttraction;
+    }
+
+    /**
+     * Sets reciprocal attraction.
+     *
+     * @param reciprocalAttraction the reciprocal attraction
+     */
+    public ParticlesState setReciprocalAttraction(boolean reciprocalAttraction) {
+        this.reciprocalAttraction = reciprocalAttraction;
+        return this;
+    }
+
+    /**
+     * Is reciprocal r boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isReciprocalR() {
+        return reciprocalR;
+    }
+
+    /**
+     * Sets reciprocal r.
+     *
+     * @param reciprocalR the reciprocal r
+     */
+    public ParticlesState setReciprocalR(boolean reciprocalR) {
+        this.reciprocalR = reciprocalR;
         return this;
     }
 

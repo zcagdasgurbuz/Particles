@@ -94,5 +94,51 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
                 }
             }
         }
+        //if reciprocal, adjust..
+        if(state.isReciprocalR() || state.isReciprocalAttraction()){
+            int size = state.getInfo().size();
+            double temp;
+            for (int i = 0; i < size; i++) {
+                for(int j = 0; j < size; j++){
+                    if(state.isReciprocalR()){
+                        temp = state.getInfo().getMinDistance(i, j);
+                        state.getInfo().setMinDistance(j, i, temp);
+                        temp = state.getInfo().getMaxDistance(i, j);
+                        state.getInfo().setMaxDistance(j, i, temp);
+                    }
+                    if(state.isReciprocalAttraction()){
+                        temp = state.getInfo().getAttraction(i, j);
+                        state.getInfo().setAttraction(j, i, temp);
+                    }
+                }
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
