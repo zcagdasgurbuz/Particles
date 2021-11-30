@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
 <StackPane fx:id="slidingMenu" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-           minWidth="-Infinity" prefWidth="300.0" xmlns="http://javafx.com/javafx"
+           minWidth="-Infinity" prefWidth="300.0" xmlns="http://javafx.com/javafx" pickOnBounds="false"
            xmlns:fx="http://javafx.com/fxml" fx:controller="com.zeynelcgurbuz.particles.ui.SlidingMenuController" >
     <children>
         <fx:include fx:id="menuContent" prefHeight="${slidingMenu.prefHeight}" source="menu-content.fxml"/>
         <Button fx:id="menuButton" contentDisplay="CENTER" graphicTextGap="0.0" translateX="320"
                 translateY="20" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="CENTER"
-                wrapText="true" onAction="#menuButtonAction">
+                wrapText="true" pickOnBounds="false" onAction="#menuButtonAction">
             <graphic>
                 <AnchorPane fx:id="hamburgerShape">
                     <children>
