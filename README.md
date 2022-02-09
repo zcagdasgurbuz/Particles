@@ -2,7 +2,7 @@
 
 2d collision detection, attaction, repulsion and simple redux implementation.
 
-Write up is comming!
+Write up is coming!
 
 In mean time, play around with release [JAR](https://github.com/zcagdasgurbuz/Particles/releases/tag/Jar)
 
