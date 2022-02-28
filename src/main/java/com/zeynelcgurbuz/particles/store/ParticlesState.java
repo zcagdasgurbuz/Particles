@@ -33,6 +33,12 @@ public class ParticlesState implements Serializable {
      */
     private Vector forceFieldPosition;
 
+
+    /**
+     * The previous Force field position
+     */
+    private Vector preForceFieldPosition;
+
     /**
      * The number of particles.
      */
@@ -193,11 +199,11 @@ public class ParticlesState implements Serializable {
 
     /**
      * Instantiates a new Particles state.
-     *
-     * @param width                The width of the visible area.
+     *  @param width                The width of the visible area.
      * @param height               The height of the visible area.
      * @param mouseDragPosition    The mouse drag position
-     * @param forceFieldPosition   The force field position, *not utilized yet*
+     * @param forceFieldPosition   The force field position
+     * @param preForceFieldPosition The previous force field position
      * @param particleCount        The number of particles
      * @param colorCount           The number of types/colors
      * @param flatRadius           The radius of the particles
@@ -230,18 +236,19 @@ public class ParticlesState implements Serializable {
      * @param elasticCollision     Whether the elastic collisions is active
      * @param info                 the info
      */
-    public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, int particleCount, int colorCount,
+    public ParticlesState(double width, double height, Vector mouseDragPosition, Vector forceFieldPosition, Vector preForceFieldPosition, int particleCount, int colorCount,
                           double flatRadius, int inRangeStyle, int belowRangeStyle, int outRangeStyle, double minRLower, double minRUpper,
                           double minRMean, double minRStd, boolean minRStandard, double maxRLower, double maxRUpper,
                           double maxRMean, double maxRStd, boolean maxRStandard, boolean reciprocalR, double attractionMin,
-                          double attractionMax,  double attractionMean, double attractionStd, boolean attractionStandard,
-                          boolean negateSelfAttraction,  boolean reciprocalAttraction, double friction, double g,
+                          double attractionMax, double attractionMean, double attractionStd, boolean attractionStandard,
+                          boolean negateSelfAttraction, boolean reciprocalAttraction, double friction, double g,
                           boolean molAttract, boolean gravAttract, boolean wallsActive, boolean elasticCollision,
                           ParticlesInfo info) {
         this.width = width;
         this.height = height;
         this.mouseDragPosition = mouseDragPosition;
         this.forceFieldPosition = forceFieldPosition;
+        this.preForceFieldPosition = preForceFieldPosition;
         this.particleCount = particleCount;
         this.colorCount = colorCount;
         this.flatRadius = flatRadius;
@@ -282,7 +289,7 @@ public class ParticlesState implements Serializable {
      */
     public ParticlesState copy() {
         ParticlesState copy = new ParticlesState(width, height, new Vector(mouseDragPosition), new Vector(forceFieldPosition),
-                particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                preForceFieldPosition, particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, reciprocalR,
                 attractionMin, attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction,
                 reciprocalAttraction, friction, g, molAttract, gravAttract, wallsActive, elasticCollision,
@@ -299,7 +306,7 @@ public class ParticlesState implements Serializable {
      */
     public ParticlesState shallowCopy() {
         ParticlesState copy = new ParticlesState(width, height, mouseDragPosition, forceFieldPosition,
-                particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
+                preForceFieldPosition, particleCount, colorCount, flatRadius, inRangeStyle, belowRangeStyle, outRangeStyle, minRLower, minRUpper,
                 minRMean, minRStd, minRStandard, maxRLower, maxRUpper, maxRMean, maxRStd, maxRStandard, reciprocalR, attractionMin,
                 attractionMax, attractionMean, attractionStd, attractionStandard, negateSelfAttraction, reciprocalAttraction, friction,
                 g, molAttract, gravAttract, wallsActive, elasticCollision, info);
@@ -358,6 +365,16 @@ public class ParticlesState implements Serializable {
         this.forceFieldPosition = forceFieldPosition;
         return this;
     }
+
+    public Vector getPreForceFieldPosition() {
+        return preForceFieldPosition;
+    }
+
+    public ParticlesState setPreForceFieldPosition(Vector preForceFieldPosition) {
+        this.preForceFieldPosition = preForceFieldPosition;
+        return this;
+    }
+
 
     /**
      * Gets width.

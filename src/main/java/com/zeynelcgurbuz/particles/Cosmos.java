@@ -33,7 +33,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
     /**
      * Recursive task particles limit
      */
-    private final int REC_LIMIT = 30;
+    private final int REC_LIMIT = 5;
     /**
      * Recursive task executive service.
      */
@@ -118,7 +118,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
     @Override
     public void onChange(ParticlesState state) {
-
         this.state = state;
         if (state.isRestartRequested()) {
             setRandomParticles();
@@ -142,13 +141,13 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
         PositionCalculator positionCalculator = new PositionCalculator(particles, state);
 
-
+        if (state.isWallsActive())
+            forkJoinPool.invoke(wallCollisionCalc);
         if (state.isMolAttract())
             forkJoinPool.invoke(moleculerAttractionCalc);
         if (state.isGravAttract())
             forkJoinPool.invoke(gravitationalAttractionCalc);
-        if (state.isWallsActive())
-            forkJoinPool.invoke(wallCollisionCalc);
+
         forkJoinPool.submit(positionCalculator);
         if(state.isElasticCollision())
             forkJoinPool.invoke(particlesCollisionCalc);
@@ -201,9 +200,6 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
                 graphics.strokeOval(forceField.x - 30, forceField.y - 30, 60,60);
             }
         }
-
-
-
 
         //draw all particles
         for (Particle particle : particles) {

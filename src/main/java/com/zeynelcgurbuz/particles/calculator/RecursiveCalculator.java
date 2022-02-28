@@ -64,14 +64,20 @@ public class RecursiveCalculator extends RecursiveAction {
                 calculator.calculate(idx, particles ,state);
             }
         } else {
-            int q = (int)Math.round(length / 4.0);
+/*            int q = (int)Math.round(length / 4.0);
             int h = (int)Math.round(length / 2.0);
             int qqq = (int)Math.round(length / 4.0  * 3.0);
             RecursiveCalculator q1 = new RecursiveCalculator(start, start + q, recLimit, calculator ,particles ,state);
             RecursiveCalculator q2 = new RecursiveCalculator(start + q, start + h, recLimit, calculator ,particles ,state);
             RecursiveCalculator q3 = new RecursiveCalculator(start + h, start + qqq, recLimit, calculator ,particles ,state);
             RecursiveCalculator q4 = new RecursiveCalculator(start + qqq, end, recLimit, calculator ,particles ,state);
-            invokeAll(q1, q2, q3, q4);
+            invokeAll(q1, q2, q3, q4);*/
+            int mid = start + ((end - start) / 2);
+            RecursiveCalculator left = new RecursiveCalculator(start, mid, recLimit, calculator ,particles ,state);
+            RecursiveCalculator right = new RecursiveCalculator(mid, end, recLimit, calculator ,particles ,state);
+            left.fork();
+            right.compute();
+            left.join();
         }
     }
 }

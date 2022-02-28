@@ -13,8 +13,8 @@ public class SimpleCollisionCalculator implements Calculator {
 
     @Override
     public void calculate(int index, ArrayList<Particle> particles, ParticlesState state) {
+        Particle particle1 = particles.get(index);
         for (int otherIdx = 0; otherIdx < particles.size(); otherIdx++) {
-            Particle particle1 = particles.get(index);
             if (index != otherIdx) {
                 Particle particle2 = particles.get(otherIdx);
                 double expectedR = particle1.getRadius() + particle2.getRadius();

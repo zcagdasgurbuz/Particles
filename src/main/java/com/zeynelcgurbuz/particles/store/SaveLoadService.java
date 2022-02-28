@@ -31,7 +31,7 @@ public enum SaveLoadService {
     /**
      * The Default state.
      */
-    private final ParticlesState defaultState = new ParticlesState(1200, 800, (new Vector()), (new Vector()), 400,
+    private final ParticlesState defaultState = new ParticlesState(1200, 800, (new Vector()), (new Vector()), (new Vector()), 400,
             9, 4, 4, 5, 0, 10, 30, 20.0,
             5.0, false, 30, 100, 75.0, 15.0, false, true,
             -10.0, 10.0, 0.5, 5.0, true,
@@ -40,7 +40,7 @@ public enum SaveLoadService {
     /**
      * The Dummy.
      */
-    public final ParticlesState dummy = new ParticlesState(0, 0, null, null, 0,
+    public final ParticlesState dummy = new ParticlesState(0, 0, null, null, null, 0,
             0, 1, 0, 0, 0, 0, 0, 0, 0,
             false, 0, 0, 0, 0, false, false, 0,
             0, 0, 0, false, false, false, 0, 0,

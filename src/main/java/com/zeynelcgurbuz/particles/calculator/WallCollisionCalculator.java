@@ -39,7 +39,7 @@ public class WallCollisionCalculator implements Calculator {
             positionVector1.y = state.getHeight() - radius;
             velocityVector1.y = -velocityVector1.y;
         }
-        if (forceField.x != 0 && forceField.y != 0) {
+/*        if (forceField.x != 0 && forceField.y != 0) {
             double x = 0.0;
             double y = 0.0;
             if (previousForceField.x != 0 && previousForceField.y != 0) {
@@ -60,7 +60,7 @@ public class WallCollisionCalculator implements Calculator {
         } else {
             previousForceField = new Vector();
         }
-        particle.setPosition(positionVector1);
+        particle.setPosition(positionVector1);*/
         particle.setVelocity(velocityVector1);
     }
 }

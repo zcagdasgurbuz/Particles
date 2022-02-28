@@ -38,7 +38,9 @@ public class ParticlesReducer implements Reducer<ParticlesState> {
             return oldState.shallowCopy().setMouseDragPosition(mouseDragAction.getValue());
         } else if (action instanceof ForceFieldAction) {
             ForceFieldAction forceFieldAction = (ForceFieldAction) action;
-            return oldState.shallowCopy().setForceFieldPosition(forceFieldAction.getValue());
+            return oldState.shallowCopy()
+                    .setPreForceFieldPosition(oldState.getForceFieldPosition())
+                    .setForceFieldPosition(forceFieldAction.getValue());
         } else if (action instanceof BoundariesChangedAction) {
             return oldState.shallowCopy().setWidth(((BoundariesChangedAction) action).getWidth())
                     .setHeight(((BoundariesChangedAction) action).getHeight());

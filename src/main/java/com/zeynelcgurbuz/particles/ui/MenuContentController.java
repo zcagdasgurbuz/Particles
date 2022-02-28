@@ -384,7 +384,6 @@ public class MenuContentController implements Subscriber<ParticlesState> {
      * Sets listeners.
      */
     private void setListeners() {
-
         attractionStandard.selectedProperty().addListener((observable, oldValue, newValue) -> {
             state.setAttractionStandard(newValue);
             needRecalculation.set(true);
