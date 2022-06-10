@@ -5,46 +5,68 @@ import com.zeynelcgurbuz.particles.Vector;
 import com.zeynelcgurbuz.particles.store.ParticlesState;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Molecular attraction calculator.
  */
 public class MolecularAttractionCalculator implements Calculator {
 
+    private static Random random = new Random();
+
     @Override
     public void calculate(int index, ArrayList<Particle> particles, ParticlesState state) {
         Particle particle1 = particles.get(index);
         for (int idx = 0; idx < particles.size(); idx++) {
-            Particle particle2 = particles.get(idx);
-            double particle1MaxAttractionRadius = state.getInfo().getMaxDistance(particle1.getType(), particle2.getType());
-            double particle1MinAttractionRadius = state.getInfo().getMinDistance(particle1.getType(), particle2.getType());
-            double particle2MaxAttractionRadius = state.getInfo().getMaxDistance(particle2.getType(), particle1.getType());
-            double particle2MinAttractionRadius = state.getInfo().getMinDistance(particle2.getType(), particle1.getType());
-            Vector delta = Vector.subtract(particle2.getPosition(), particle1.getPosition());
-            double distance = delta.length();
-            delta.unitVector();
-            if (index != idx
-                    && distance <= particle1MaxAttractionRadius
-                    && distance <= particle2MaxAttractionRadius
-                    && distance >= particle1MinAttractionRadius
-                    && distance >= particle2MinAttractionRadius) {
-                applyForceBasedOnStyle(delta, particle1, particle2,
-                        particle1MaxAttractionRadius, particle1MinAttractionRadius,
-                        particle2MaxAttractionRadius, particle2MinAttractionRadius,
-                        distance, state.getInRangeStyle(), state);
-            } else if (index != idx && distance < particle1MinAttractionRadius
-                    && distance < particle2MinAttractionRadius) {
-                applyForceBasedOnStyle(delta, particle1, particle2,
-                        particle1MaxAttractionRadius, particle1MinAttractionRadius,
-                        particle2MaxAttractionRadius, particle2MinAttractionRadius,
-                        distance, state.getBelowRangeStyle(), state);
-            } else if (index != idx && distance > particle1MaxAttractionRadius
-                    && distance > particle2MaxAttractionRadius) {
-                applyForceBasedOnStyle(delta, particle1, particle2,
-                        particle1MaxAttractionRadius, particle1MinAttractionRadius,
-                        particle2MaxAttractionRadius, particle2MinAttractionRadius,
-                        distance, state.getOutRangeStyle(), state);
+            if(index != idx ){
+                Particle particle2 = particles.get(idx);
+                double particle1MaxAttractionRadius = state.getInfo().getMaxDistance(particle1.getType(), particle2.getType());
+                double particle1MinAttractionRadius = state.getInfo().getMinDistance(particle1.getType(), particle2.getType());
+                double particle2MaxAttractionRadius = state.getInfo().getMaxDistance(particle2.getType(), particle1.getType());
+                double particle2MinAttractionRadius = state.getInfo().getMinDistance(particle2.getType(), particle1.getType());
+                Vector delta = Vector.subtract(particle2.getPosition(), particle1.getPosition());
+                // Particles trapped at the corners pushed back to same locations by wall collision calculator
+                // i.e. x = radius, y = radius and all particles are the same size.
+                // When two particles at the same location, delta vector is zero, so is distance. Consequently,
+                // some calculations result in NaN
+                // possible solutions
+                // 1. get rid of threading
+                // 2. give particles random radius values with very small variance to prevent them from
+                // getting pushed to same locations by wall collision calculator
+                // 3. calculate unit vector based on previous locations... (too much work)
+                // 4. this ugly thing...
+                if(delta.x == 0 && delta.y == 0) {
+                    // if needed... generate very small random delta
+                    // of course, the direction is important, cannot set all of them
+                    // to the same direction. Choose a random one.
+                    delta = new Vector(0.0000001 * (random.nextBoolean() ? 1 : -1),
+                            0.0000001 * (random.nextBoolean() ? 1 : -1));
+                }
+                double distance = delta.length();
+                delta.unitVector();
+                if (distance <= particle1MaxAttractionRadius
+                        && distance <= particle2MaxAttractionRadius
+                        && distance >= particle1MinAttractionRadius
+                        && distance >= particle2MinAttractionRadius) {
+                    applyForceBasedOnStyle(delta, particle1, particle2,
+                            particle1MaxAttractionRadius, particle1MinAttractionRadius,
+                            particle2MaxAttractionRadius, particle2MinAttractionRadius,
+                            distance, state.getInRangeStyle(), state);
+                } else if (distance < particle1MinAttractionRadius
+                        && distance < particle2MinAttractionRadius) {
+                    applyForceBasedOnStyle(delta, particle1, particle2,
+                            particle1MaxAttractionRadius, particle1MinAttractionRadius,
+                            particle2MaxAttractionRadius, particle2MinAttractionRadius,
+                            distance, state.getBelowRangeStyle(), state);
+                } else if (distance > particle1MaxAttractionRadius
+                        && distance > particle2MaxAttractionRadius) {
+                    applyForceBasedOnStyle(delta, particle1, particle2,
+                            particle1MaxAttractionRadius, particle1MinAttractionRadius,
+                            particle2MaxAttractionRadius, particle2MinAttractionRadius,
+                            distance, state.getOutRangeStyle(), state);
+                }
             }
+
         }
     }
 

@@ -141,18 +141,23 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
 
         PositionCalculator positionCalculator = new PositionCalculator(particles, state);
 
+        if (state.isMolAttract()) {
+            forkJoinPool.invoke(moleculerAttractionCalc);
+        }
+        if (state.isGravAttract()) {
+            forkJoinPool.invoke(gravitationalAttractionCalc);
+        }
         if (state.isWallsActive())
             forkJoinPool.invoke(wallCollisionCalc);
-        if (state.isMolAttract())
-            forkJoinPool.invoke(moleculerAttractionCalc);
-        if (state.isGravAttract())
-            forkJoinPool.invoke(gravitationalAttractionCalc);
 
         forkJoinPool.submit(positionCalculator);
-        if(state.isElasticCollision())
+        if(state.isElasticCollision()) {
             forkJoinPool.invoke(particlesCollisionCalc);
-        else
+        }
+        else {
             forkJoinPool.invoke(simpleCollisionCalc);
+        }
+
         drawCosmos();
     }
 
@@ -167,7 +172,7 @@ public class Cosmos implements Animatable, Subscriber<ParticlesState> {
             particle.setPosition(new Vector(
                     random.nextDouble() * state.getWidth(),
                     random.nextDouble() * state.getHeight()));
-            int type = random.nextInt(state.getInfo().size());
+            int type = i % state.getInfo().size();
             particle.setType(type);
             particle.setColor(Color.web(state.getInfo().getColor(type)));
             particle.setRadius(state.getFlatRadius());

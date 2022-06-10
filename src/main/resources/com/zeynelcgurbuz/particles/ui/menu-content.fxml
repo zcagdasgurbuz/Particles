@@ -242,11 +242,11 @@
                                         </VBox>
                                     </HBox>
                                 </VBox>
+                                <HBox spacing="10">
+                                    <Label text="Reciprocal R" prefWidth="200"/>
+                                    <CheckBox fx:id="reciprocalR"/>
+                                </HBox>
                             </VBox>
-                            <HBox spacing="10">
-                                <Label text="Reciprocal R" prefWidth="200"/>
-                                <CheckBox fx:id="reciprocalR"/>
-                            </HBox>
                             <Separator prefWidth="250"/>
                             <HBox spacing="10">
                                 <Button text="Restart" fx:id="restartButton" onAction="#restartButton"/>
@@ -255,12 +255,12 @@
                         </VBox>
                     </content>
                 </ScrollPane>
-                <Region prefWidth="290.0" VBox.vgrow="ALWAYS"/>
-                <VBox VBox.vgrow="NEVER" minHeight="5">
-                        <Accordion >
+                <Region prefWidth="290.0" VBox.vgrow="ALWAYS" minHeight="5"/>
+                <VBox VBox.vgrow="NEVER">
+                        <Accordion>
                             <panes>
-                                <TitledPane  fx:id="titledPane" prefWidth="280.0" animated="false" text="Save \ Load">
-                                    <ScrollPane fitToHeight="true" minHeight="5">
+                                <TitledPane fx:id="titledPane" prefWidth="280.0" animated="false" text="Save \ Load">
+                                    <ScrollPane fitToHeight="true" minHeight="250" >
                                     <content>
                                     <VBox spacing="5">
                                         <HBox spacing="5">

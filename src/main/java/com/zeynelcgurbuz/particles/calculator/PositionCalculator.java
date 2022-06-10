@@ -37,7 +37,7 @@ public class PositionCalculator extends Task<Void> {
     @Override
     protected Void call() {
         for (Particle particle : particles) {
-            Vector positionVector1 = particle.getPosition();
+            Vector positionVector = particle.getPosition();
             Vector forceField = state.getForceFieldPosition();
             Vector previousForceField = state.getPreForceFieldPosition();
             if (forceField.x != 0 && forceField.y != 0) {
@@ -48,11 +48,11 @@ public class PositionCalculator extends Task<Void> {
                     y = forceField.y - previousForceField.y;
                 }
                 //meh
-                if (positionVector1.x > (forceField.x - 30) && positionVector1.x < (forceField.x + 30) &&
-                        positionVector1.y > (forceField.y - 30) && positionVector1.y < (forceField.y + 30)) {
-                    positionVector1.x += x;
-                    positionVector1.y += y;
-                    particle.setPosition(positionVector1);
+                if (positionVector.x > (forceField.x - 30) && positionVector.x < (forceField.x + 30) &&
+                        positionVector.y > (forceField.y - 30) && positionVector.y < (forceField.y + 30)) {
+                    positionVector.x += x;
+                    positionVector.y += y;
+                    particle.setPosition(positionVector);
                 } else {
                     particle.setPosition(particle.getPosition().add(particle.getVelocity()));
                 }

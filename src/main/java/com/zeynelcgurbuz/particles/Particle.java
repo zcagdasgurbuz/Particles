@@ -76,6 +76,9 @@ public class Particle {
      * @param velocityVector the velocity vector
      */
     public void setVelocity(Vector velocityVector) {
+        if(Double.isNaN(velocityVector.x)){
+            System.out.println("hello");
+        }
         this.velocity = velocityVector;
     }
 
@@ -85,7 +88,7 @@ public class Particle {
      * @return the velocity
      */
     public Vector getVelocity() {
-        return velocity;
+        return new Vector(velocity);
     }
 
     /**
