@@ -1,6 +1,6 @@
-# Particles
+# Particles  
 
-Is an attempt to reproduce Jeffrey Ventrella's [Clusters](https://ventrella.com/Clusters/) on Java.
+Particles is an attempt to reproduce Jeffrey Ventrella's [Clusters](https://ventrella.com/Clusters/) with Java and JavaFx.
 
 I was amazed by the Clusters, and I wanted to reproduce it. However,  I didn't have access to its source code. So, I created everything from scratch, and the Particles took shape.
 
