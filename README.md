@@ -38,6 +38,6 @@ F11: Full-screen mode
 
   
 ### Java Version
-Java version : 11
-JavaFx version : 15
+Java version : 11   
+JavaFx version : 15   
 Built by using Maven
